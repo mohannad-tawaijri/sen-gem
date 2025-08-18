@@ -1,0 +1,7 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="100" fill="#009639"/>
+  <rect width="300" height="60" y="70" fill="#FFFFFF"/>
+  <rect width="300" height="60" y="130" fill="#009639"/>
+  <circle cx="150" cy="100" r="25" fill="#FFDF00"/>
+  <text x="150" y="108" text-anchor="middle" fill="#009639" font-size="14" font-family="Arial">⭐</text>
+</svg>

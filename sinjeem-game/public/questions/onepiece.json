@@ -1,0 +1,44 @@
+[
+  {
+    "id": "op-200-001",
+    "difficulty": 200,
+    "q": "ما اسم قبعة لوفي الشهيرة؟",
+    "a": "قبعة القش",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop", "alt": "قبعة قش" }]
+  },
+  {
+    "id": "op-200-002",
+    "difficulty": 200,
+    "q": "ما اسم سيف زورو الأبيض؟",
+    "a": "وادو إيتشي مونجي",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop", "alt": "سيف ياباني" }]
+  },
+  {
+    "id": "op-400-001",
+    "difficulty": 400,
+    "q": "من هو أول شخص انضم لطاقم قبعة القش بعد لوفي؟",
+    "a": "رورونوا زورو",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=300&fit=crop", "alt": "محارب بسيوف" }]
+  },
+  {
+    "id": "op-400-002",
+    "difficulty": 400,
+    "q": "ما اسم فاكهة الشيطان التي أكلها لوتشي؟",
+    "a": "نيكو نيكو نو مي (فاكهة القط)",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=400&h=300&fit=crop", "alt": "نمر أو قط كبير" }]
+  },
+  {
+    "id": "op-600-001",
+    "difficulty": 600,
+    "q": "ما اسم الجزيرة التي وُلد فيها غول دي روجر؟",
+    "a": "جزيرة لوغ تاون",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop", "alt": "جزيرة استوائية" }]
+  },
+  {
+    "id": "op-600-002",
+    "difficulty": 600,
+    "q": "ما اسم تقنية كايدو القتالية الأقوى؟",
+    "a": "كايين دايكو (طبول اللهب العظيم)",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop", "alt": "تنين نافث للنار" }]
+  }
+]

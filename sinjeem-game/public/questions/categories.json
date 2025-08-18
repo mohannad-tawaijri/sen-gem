@@ -1,0 +1,8 @@
+[
+  { "slug": "flags",     "name": "أعلام (دول)",       "image": "/media/categories/flags.png" },
+  { "slug": "got",       "name": "صراع العروش",       "image": "/media/categories/got.png" },
+  { "slug": "onepiece",  "name": "ون بيس",             "image": "/media/categories/onepiece.png" },
+  { "slug": "proverbs",   "name": "أمثال شعبية",       "image": "/media/categories/proverbs.png" },
+  { "slug": "football",   "name": "كرة القدم",         "image": "/media/categories/football.png" },
+  { "slug": "general",    "name": "معلومات عامة",      "image": "/media/categories/general.png" }
+]

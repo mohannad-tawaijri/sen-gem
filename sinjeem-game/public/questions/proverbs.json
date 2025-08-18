@@ -1,0 +1,44 @@
+[
+  {
+    "id": "proverbs-200-001",
+    "difficulty": 200,
+    "q": "أكمل المثل: العجلة من...",
+    "a": "الشيطان",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop", "alt": "كتاب قديم" }]
+  },
+  {
+    "id": "proverbs-200-002",
+    "difficulty": 200,
+    "q": "أكمل المثل: الصبر...",
+    "a": "مفتاح الفرج",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1606229365485-93a3b8ee0385?w=400&h=300&fit=crop", "alt": "مفتاح ذهبي" }]
+  },
+  {
+    "id": "proverbs-400-001",
+    "difficulty": 400,
+    "q": "أكمل المثل: من طلب العُلا...",
+    "a": "سهر الليالي",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop", "alt": "نجوم في الليل" }]
+  },
+  {
+    "id": "proverbs-400-002",
+    "difficulty": 400,
+    "q": "أكمل المثل: رب صدفة...",
+    "a": "خير من ألف ميعاد",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop", "alt": "صدفة على الشاطئ" }]
+  },
+  {
+    "id": "proverbs-600-001",
+    "difficulty": 600,
+    "q": "أكمل المثل: إذا كان الكلام من فضة...",
+    "a": "فالسكوت من ذهب",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1541233349642-6e425fe6190e?w=400&h=300&fit=crop", "alt": "ذهب وفضة" }]
+  },
+  {
+    "id": "proverbs-600-002",
+    "difficulty": 600,
+    "q": "أكمل المثل: من أعان ظالماً...",
+    "a": "على مظلوم فقد برئت منه ذمة الله",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop", "alt": "كتاب مقدس" }]
+  }
+]

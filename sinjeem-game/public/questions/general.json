@@ -1,0 +1,44 @@
+[
+  {
+    "id": "general-200-001",
+    "difficulty": 200,
+    "q": "ما هي عاصمة فرنسا؟",
+    "a": "باريس",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=400&h=300&fit=crop", "alt": "برج إيفل في باريس" }]
+  },
+  {
+    "id": "general-200-002",
+    "difficulty": 200,
+    "q": "كم عدد أيام السنة الميلادية؟",
+    "a": "365 يوم",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop", "alt": "تقويم" }]
+  },
+  {
+    "id": "general-400-001",
+    "difficulty": 400,
+    "q": "ما اسم أطول نهر في العالم؟",
+    "a": "نهر النيل",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1539650116574-75c0c6d73dd1?w=400&h=300&fit=crop", "alt": "نهر النيل" }]
+  },
+  {
+    "id": "general-400-002",
+    "difficulty": 400,
+    "q": "في أي قارة تقع صحراء الكلهاري؟",
+    "a": "أفريقيا",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=400&h=300&fit=crop", "alt": "صحراء أفريقية" }]
+  },
+  {
+    "id": "general-600-001",
+    "difficulty": 600,
+    "q": "ما اسم أصغر دولة في العالم؟",
+    "a": "الفاتيكان",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1552832230-c0197ccb2ba2?w=400&h=300&fit=crop", "alt": "كاتدرائية القديس بطرس" }]
+  },
+  {
+    "id": "general-600-002",
+    "difficulty": 600,
+    "q": "في أي عام سقط جدار برلين؟",
+    "a": "1989",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=400&h=300&fit=crop", "alt": "جدار برلين" }]
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "football-200-001",
+    "difficulty": 200,
+    "q": "كم عدد اللاعبين في فريق كرة القدم؟",
+    "a": "11 لاعب",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400&h=300&fit=crop", "alt": "كرة قدم" }]
+  },
+  {
+    "id": "football-200-002",
+    "difficulty": 200,
+    "q": "ما مدة مباراة كرة القدم الرسمية؟",
+    "a": "90 دقيقة",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1606229365485-93a3b8ee0385?w=400&h=300&fit=crop", "alt": "ساعة توقيت" }]
+  },
+  {
+    "id": "football-400-001",
+    "difficulty": 400,
+    "q": "في أي عام أقيمت أول بطولة كأس العالم؟",
+    "a": "1930",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=400&h=300&fit=crop", "alt": "كأس ذهبي" }]
+  },
+  {
+    "id": "football-400-002",
+    "difficulty": 400,
+    "q": "ما اسم النادي الذي يلعب في ملعب الكامب نو؟",
+    "a": "برشلونة",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=300&fit=crop", "alt": "ملعب كرة قدم كبير" }]
+  },
+  {
+    "id": "football-600-001",
+    "difficulty": 600,
+    "q": "من هو أصغر لاعب سجل هدف في كأس العالم؟",
+    "a": "بيليه",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?w=400&h=300&fit=crop", "alt": "لاعب كرة قدم برازيلي" }]
+  },
+  {
+    "id": "football-600-002",
+    "difficulty": 600,
+    "q": "ما اسم الملعب الذي أقيمت فيه نهائي كأس العالم 1966؟",
+    "a": "ملعب ويمبلي",
+    "media": [{ "type": "image", "src": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=400&h=300&fit=crop", "alt": "ملعب ويمبلي" }]
+  }
+]
