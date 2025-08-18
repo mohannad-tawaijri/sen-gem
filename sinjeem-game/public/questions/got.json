@@ -335,20 +335,7 @@
     ],
     "tags": ["got", "organizations"]
   },
-  {
-    "id": "got-400-013",
-    "difficulty": 400,
-    "q": "ما اسم حصان خال دروجو؟",
-    "a": "لا يُذكر اسمه في المسلسل",
-    "media": [
-      {
-        "type": "image",
-        "src": "./media/questions/got/dothraki_horse.png",
-        "alt": "حصان دوثراكي"
-      }
-    ],
-    "tags": ["got", "dothraki"]
-  },
+
   {
     "id": "got-400-014",
     "difficulty": 400,
@@ -450,16 +437,16 @@
   {
     "id": "got-600-006",
     "difficulty": 600,
-    "q": "ما اسم الأخت الأصغر لدينيريس تارغاريين؟",
-    "a": "لا توجد أخت أصغر، لديها أخوان فقط",
+    "q": "ما اسم أخ دينيريس الأكبر؟",
+    "a": "رايغار تارغاريين",
     "media": [
       {
         "type": "image",
-        "src": "./media/questions/got/targaryen_tree.png",
-        "alt": "شجرة عائلة تارغاريين"
+        "src": "./media/questions/got/rhaegar_targaryen.png",
+        "alt": "رايغار تارغاريين"
       }
     ],
-    "tags": ["got", "family_trees"]
+    "tags": ["got", "targaryens", "characters"]
   },
   {
     "id": "got-600-007",
@@ -483,7 +470,7 @@
     "media": [
       {
         "type": "image",
-        "src": "./media/questions/got/aegon_conqueror.png",
+        "src": "./media/questions/got/aegon_conqueror.jfif",
         "alt": "إيجون الفاتح"
       }
     ],
@@ -562,8 +549,8 @@
   {
     "id": "got-600-014",
     "difficulty": 600,
-    "q": "ما اسم المدينة التي تُعرف بـ 'عروس البحر'؟",
-    "a": "ليس لايز",
+    "q": "ما اسم المدينة الحرة المشهورة بالكورتيزان؟",
+    "a": "ليس",
     "media": [
       {
         "type": "image",
@@ -586,5 +573,733 @@
       }
     ],
     "tags": ["got", "battles"]
+  },
+  {
+    "id": "got-200-013",
+    "difficulty": 200,
+    "q": "ما اسم عمة دينيريس تارغاريين؟",
+    "a": "ليانا مورمونت",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/lyanna_mormont.png",
+        "alt": "ليانا مورمونت"
+      }
+    ],
+    "tags": ["got", "characters"]
+  },
+  {
+    "id": "got-200-014",
+    "difficulty": 200,
+    "q": "ما اسم الدين الجديد في الممالك السبع؟",
+    "a": "إيمان السبعة",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/sept_of_seven.png",
+        "alt": "معبد السبعة"
+      }
+    ],
+    "tags": ["got", "religion"]
+  },
+  {
+    "id": "got-200-015",
+    "difficulty": 200,
+    "q": "ما اسم قائد الحرس الذهبي؟",
+    "a": "جانوس سلينت",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/janos_slynt.png",
+        "alt": "جانوس سلينت"
+      }
+    ],
+    "tags": ["got", "characters"]
+  },
+  {
+    "id": "got-200-016",
+    "difficulty": 200,
+    "q": "ما اسم ذراع دينيريس المفقود؟",
+    "a": "جوراه مورمونت",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/jorah_mormont.png",
+        "alt": "جوراه مورمونت"
+      }
+    ],
+    "tags": ["got", "characters"]
+  },
+  {
+    "id": "got-200-017",
+    "difficulty": 200,
+    "q": "ما اسم الخصي الأكبر؟",
+    "a": "فاريس",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/varys.png",
+        "alt": "فاريس"
+      }
+    ],
+    "tags": ["got", "characters"]
+  },
+  {
+    "id": "got-200-018",
+    "difficulty": 200,
+    "q": "ما اسم سيد المال الأصغر؟",
+    "a": "بيتير بايليش",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/petyr_baelish.png",
+        "alt": "بيتير بايليش"
+      }
+    ],
+    "tags": ["got", "characters"]
+  },
+  {
+    "id": "got-400-016",
+    "difficulty": 400,
+    "q": "ما اسم المدينة التي حكمتها دينيريس في خليج العبيد؟",
+    "a": "ميرين",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/meereen.png",
+        "alt": "مدينة ميرين"
+      }
+    ],
+    "tags": ["got", "cities"]
+  },
+  {
+    "id": "got-400-017",
+    "difficulty": 400,
+    "q": "ما اسم المعركة الكبرى في وينترفيل؟",
+    "a": "معركة الأوغاد",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/battle_bastards.png",
+        "alt": "معركة الأوغاد"
+      }
+    ],
+    "tags": ["got", "battles"]
+  },
+  {
+    "id": "got-400-018",
+    "difficulty": 400,
+    "q": "ما اسم جيمي لانيستر الحقيقي؟",
+    "a": "سير جيمي لانيستر",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/jaime_lannister.png",
+        "alt": "جيمي لانيستر"
+      }
+    ],
+    "tags": ["got", "characters", "lannisters"]
+  },
+  {
+    "id": "got-400-019",
+    "difficulty": 400,
+    "q": "ما اسم قائد جيش الموتى؟",
+    "a": "الملك الليلي",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/army_of_dead.png",
+        "alt": "جيش الموتى"
+      }
+    ],
+    "tags": ["got", "white_walkers"]
+  },
+  {
+    "id": "got-400-020",
+    "difficulty": 400,
+    "q": "ما اسم زوجة روب ستارك؟",
+    "a": "تاليسا مايغير",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/talisa_maegyr.png",
+        "alt": "تاليسا مايغير"
+      }
+    ],
+    "tags": ["got", "characters"]
+  },
+  {
+    "id": "got-400-021",
+    "difficulty": 400,
+    "q": "ما اسم قلعة آل آرين؟",
+    "a": "إيري",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/eyrie.png",
+        "alt": "قلعة إيري"
+      }
+    ],
+    "tags": ["got", "castles"]
+  },
+  {
+    "id": "got-600-016",
+    "difficulty": 600,
+    "q": "ما اسم السيف الذي كسر في معركة تاور أوف جوي؟",
+    "a": "فجر",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/dawn_sword.png",
+        "alt": "سيف فجر"
+      }
+    ],
+    "tags": ["got", "weapons", "history"]
+  },
+  {
+    "id": "got-600-017",
+    "difficulty": 600,
+    "q": "ما اسم أول رب حديدي للجزر الحديدية؟",
+    "a": "الملك الرمادي",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/grey_king.png",
+        "alt": "الملك الرمادي"
+      }
+    ],
+    "tags": ["got", "history", "ironborn"]
+  },
+  {
+    "id": "got-600-018",
+    "difficulty": 600,
+    "q": "ما اسم النجمة التي يستدل بها البحارة في الشرق؟",
+    "a": "نجمة البحار",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/sea_star.png",
+        "alt": "نجمة البحار"
+      }
+    ],
+    "tags": ["got", "navigation", "lore"]
+  },
+  {
+    "id": "got-600-019",
+    "difficulty": 600,
+    "q": "ما اسم قلعة آل تارغاريين الأساسية؟",
+    "a": "دراجونستون",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/dragonstone.png",
+        "alt": "دراجونستون"
+      }
+    ],
+    "tags": ["got", "castles", "targaryens"]
+  },
+  {
+    "id": "got-600-020",
+    "difficulty": 600,
+    "q": "ما اسم الشاعر الذي غنى في الحفل الأحمر؟",
+    "a": "شاعر فولانتيس",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/red_wedding_bard.png",
+        "alt": "شاعر الحفل الأحمر"
+      }
+    ],
+    "tags": ["got", "red_wedding", "characters"]
+  },
+  {
+    "id": "got-600-021",
+    "difficulty": 600,
+    "q": "ما اسم العملة الذهبية المستخدمة في الممالك السبع؟",
+    "a": "التنين الذهبي",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/golden_dragon_coin.png",
+        "alt": "التنين الذهبي - العملة"
+      }
+    ],
+    "tags": ["got", "economy"]
+  },
+  {
+    "id": "got-600-022",
+    "difficulty": 600,
+    "q": "ما اسم البيت الذي ينحدر منه مايستر إيمون؟",
+    "a": "آل تارغاريين",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/maester_aemon_targaryen.png",
+        "alt": "مايستر إيمون تارغاريين"
+      }
+    ],
+    "tags": ["got", "maesters", "targaryens"]
+  },
+  {
+    "id": "got-600-023",
+    "difficulty": 600,
+    "q": "ما اسم خال دروجو الحقيقي؟",
+    "a": "خال دروجو",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/khal_drogo.png",
+        "alt": "خال دروجو"
+      }
+    ],
+    "tags": ["got", "dothraki", "characters"]
+  },
+  {
+    "id": "got-600-024",
+    "difficulty": 600,
+    "q": "ما اسم الطائر الذي يرسل الرسائل للمايسترز؟",
+    "a": "الغراب الأبيض",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/white_raven.png",
+        "alt": "الغراب الأبيض"
+      }
+    ],
+    "tags": ["got", "maesters", "communication"]
+  },
+  {
+    "id": "got-600-025",
+    "difficulty": 600,
+    "q": "ما اسم القلعة التي دُمرت بالنار الإغريقية؟",
+    "a": "هالرين",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/harrenhal.png",
+        "alt": "قلعة هالرين"
+      }
+    ],
+    "tags": ["got", "castles", "history"]
+  },
+  {
+    "id": "got-200-019",
+    "difficulty": 200,
+    "q": "ما اسم أخ جون سنو الأصغر؟",
+    "a": "بران ستارك",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/bran_stark.png",
+        "alt": "بران ستارك"
+      }
+    ],
+    "tags": ["got", "characters", "stark"]
+  },
+  {
+    "id": "got-200-020",
+    "difficulty": 200,
+    "q": "ما اسم أخت أريا ستارك الكبرى؟",
+    "a": "سانسا ستارك",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/sansa_stark.png",
+        "alt": "سانسا ستارك"
+      }
+    ],
+    "tags": ["got", "characters", "stark"]
+  },
+  {
+    "id": "got-200-021",
+    "difficulty": 200,
+    "q": "ما اسم الذئب الشبح لجون سنو؟",
+    "a": "غوست",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/ghost_direwolf.png",
+        "alt": "الذئب الشبح غوست"
+      }
+    ],
+    "tags": ["got", "direwolves", "jon_snow"]
+  },
+  {
+    "id": "got-200-022",
+    "difficulty": 200,
+    "q": "ما اسم الذئب الشبح لأريا ستارك؟",
+    "a": "نايميريا",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/nymeria_direwolf.png",
+        "alt": "الذئب الشبح نايميريا"
+      }
+    ],
+    "tags": ["got", "direwolves", "arya"]
+  },
+  {
+    "id": "got-200-023",
+    "difficulty": 200,
+    "q": "ما اسم زوج سيرسي لانيستر؟",
+    "a": "الملك روبرت باراثيون",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/robert_baratheon.png",
+        "alt": "الملك روبرت باراثيون"
+      }
+    ],
+    "tags": ["got", "characters", "kings"]
+  },
+  {
+    "id": "got-200-024",
+    "difficulty": 200,
+    "q": "ما اسم ابن سيرسي الأكبر؟",
+    "a": "جوفري باراثيون",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/joffrey_baratheon.png",
+        "alt": "جوفري باراثيون"
+      }
+    ],
+    "tags": ["got", "characters", "princes"]
+  },
+  {
+    "id": "got-200-025",
+    "difficulty": 200,
+    "q": "ما اسم أصغر أطفال سيرسي؟",
+    "a": "تومين باراثيون",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/tommen_baratheon.png",
+        "alt": "تومين باراثيون"
+      }
+    ],
+    "tags": ["got", "characters", "princes"]
+  },
+  {
+    "id": "got-200-026",
+    "difficulty": 200,
+    "q": "ما اسم ابنة سيرسي الوحيدة؟",
+    "a": "ميرسيلا باراثيون",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/myrcella_baratheon.png",
+        "alt": "ميرسيلا باراثيون"
+      }
+    ],
+    "tags": ["got", "characters", "princesses"]
+  },
+  {
+    "id": "got-200-027",
+    "difficulty": 200,
+    "q": "ما اسم شقيق روب ستارك الأصغر؟",
+    "a": "ريكون ستارك",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/rickon_stark.png",
+        "alt": "ريكون ستارك"
+      }
+    ],
+    "tags": ["got", "characters", "stark"]
+  },
+  {
+    "id": "got-200-028",
+    "difficulty": 200,
+    "q": "ما اسم والدة جون سنو الحقيقية؟",
+    "a": "ليانا ستارك",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/lyanna_stark.png",
+        "alt": "ليانا ستارك"
+      }
+    ],
+    "tags": ["got", "characters", "stark", "jon_snow"]
+  },
+  {
+    "id": "got-400-022",
+    "difficulty": 400,
+    "q": "ما اسم المدينة التي تشتهر بتربية المقاتلين المخصيين؟",
+    "a": "أستابور",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/astapor.png",
+        "alt": "مدينة أستابور"
+      }
+    ],
+    "tags": ["got", "cities", "unsullied"]
+  },
+  {
+    "id": "got-400-023",
+    "difficulty": 400,
+    "q": "ما اسم المدينة التي حررتها دينيريس أولاً؟",
+    "a": "سلايفرز باي",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/slavers_bay.png",
+        "alt": "خليج العبيد"
+      }
+    ],
+    "tags": ["got", "cities", "daenerys"]
+  },
+  {
+    "id": "got-400-024",
+    "difficulty": 400,
+    "q": "ما اسم قائد أبناء الحربة الذهبية؟",
+    "a": "داريو ناهاريس",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/daario_naharis.png",
+        "alt": "داريو ناهاريس"
+      }
+    ],
+    "tags": ["got", "characters", "sellswords"]
+  },
+  {
+    "id": "got-400-025",
+    "difficulty": 400,
+    "q": "ما اسم أخ دينيريس الذي باعها لخال دروجو؟",
+    "a": "فيسيريس تارغاريين",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/viserys_targaryen.png",
+        "alt": "فيسيريس تارغاريين"
+      }
+    ],
+    "tags": ["got", "characters", "targaryens"]
+  },
+  {
+    "id": "got-400-026",
+    "difficulty": 400,
+    "q": "ما اسم عرابة دينيريس؟",
+    "a": "ميسي",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/missandei.png",
+        "alt": "ميسي"
+      }
+    ],
+    "tags": ["got", "characters", "advisors"]
+  },
+  {
+    "id": "got-400-027",
+    "difficulty": 400,
+    "q": "ما اسم القائد الأعلى للحرس الليلي؟",
+    "a": "اللورد كوماندر",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/lord_commander.png",
+        "alt": "اللورد كوماندر"
+      }
+    ],
+    "tags": ["got", "nights_watch", "titles"]
+  },
+  {
+    "id": "got-400-028",
+    "difficulty": 400,
+    "q": "ما اسم أخ جيمي لانيستر التوأم؟",
+    "a": "سيرسي لانيستر",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/jaime_cersei.png",
+        "alt": "جيمي وسيرسي لانيستر"
+      }
+    ],
+    "tags": ["got", "characters", "lannisters"]
+  },
+  {
+    "id": "got-400-029",
+    "difficulty": 400,
+    "q": "ما اسم والد تيريون وجيمي وسيرسي؟",
+    "a": "تايوين لانيستر",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/tywin_lannister.png",
+        "alt": "تايوين لانيستر"
+      }
+    ],
+    "tags": ["got", "characters", "lannisters"]
+  },
+  {
+    "id": "got-400-030",
+    "difficulty": 400,
+    "q": "ما اسم وصي العرش بعد موت روبرت؟",
+    "a": "نيد ستارك",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/hand_of_king.png",
+        "alt": "وصي الملك"
+      }
+    ],
+    "tags": ["got", "politics", "stark"]
+  },
+  {
+    "id": "got-400-031",
+    "difficulty": 400,
+    "q": "ما اسم الفرقة المرتزقة التي انضمت لتيريون؟",
+    "a": "رجال الجبل",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/mountain_clans.png",
+        "alt": "رجال الجبل"
+      }
+    ],
+    "tags": ["got", "sellswords", "tyrion"]
+  },
+  {
+    "id": "got-600-026",
+    "difficulty": 600,
+    "q": "ما اسم الممر الذي يربط الوادي بالأراضي الرئيسية؟",
+    "a": "البوابات الدموية",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/bloody_gate.png",
+        "alt": "البوابات الدموية"
+      }
+    ],
+    "tags": ["got", "geography", "vale"]
+  },
+  {
+    "id": "got-600-027",
+    "difficulty": 600,
+    "q": "ما اسم المدينة الحرة التي تشتهر بتجارة العبيد؟",
+    "a": "يونكاي",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/yunkai.png",
+        "alt": "مدينة يونكاي"
+      }
+    ],
+    "tags": ["got", "cities", "slavery"]
+  },
+  {
+    "id": "got-600-028",
+    "difficulty": 600,
+    "q": "ما اسم الطقوس التي تُجرى للملوك المتوفين؟",
+    "a": "حرق الجثة",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/royal_funeral.png",
+        "alt": "جنازة ملكية"
+      }
+    ],
+    "tags": ["got", "rituals", "religion"]
+  },
+  {
+    "id": "got-600-029",
+    "difficulty": 600,
+    "q": "ما اسم النقابة التي تحكم براآفوس؟",
+    "a": "البنك الحديدي وسياسا براآفوس",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/braavos_sealord.png",
+        "alt": "سيالورد براآفوس"
+      }
+    ],
+    "tags": ["got", "politics", "braavos"]
+  },
+  {
+    "id": "got-600-030",
+    "difficulty": 600,
+    "q": "ما اسم المرض الذي يصيب الأطفال في الشمال؟",
+    "a": "الحمى الرمادية",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/greyscale.png",
+        "alt": "مرض الحمى الرمادية"
+      }
+    ],
+    "tags": ["got", "diseases", "lore"]
+  },
+  {
+    "id": "got-600-031",
+    "difficulty": 600,
+    "q": "ما اسم قلعة آل فراي؟",
+    "a": "التوأمان",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/twins_castle.png",
+        "alt": "قلعة التوأمان"
+      }
+    ],
+    "tags": ["got", "castles", "freys"]
+  },
+  {
+    "id": "got-600-032",
+    "difficulty": 600,
+    "q": "ما اسم الجسر المشهور الذي يسيطر عليه آل فراي؟",
+    "a": "جسر الخضروات",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/green_fork.png",
+        "alt": "جسر الخضروات"
+      }
+    ],
+    "tags": ["got", "geography", "freys"]
+  },
+  {
+    "id": "got-600-033",
+    "difficulty": 600,
+    "q": "ما اسم المدينة التي تشتهر بصناعة الزجاج؟",
+    "a": "ميير",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/myr_glass.png",
+        "alt": "زجاج ميير"
+      }
+    ],
+    "tags": ["got", "cities", "crafts"]
+  },
+  {
+    "id": "got-600-034",
+    "difficulty": 600,
+    "q": "ما اسم النبيذ المفضل لتيريون لانيستر؟",
+    "a": "نبيذ دورن",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/dornish_wine.png",
+        "alt": "نبيذ دورن"
+      }
+    ],
+    "tags": ["got", "food_drink", "tyrion"]
+  },
+  {
+    "id": "got-600-035",
+    "difficulty": 600,
+    "q": "ما اسم المعلم الذي علم سامويل تارلي؟",
+    "a": "مايستر إيمون",
+    "media": [
+      {
+        "type": "image",
+        "src": "./media/questions/got/sam_tarly.png",
+        "alt": "سامويل تارلي"
+      }
+    ],
+    "tags": ["got", "maesters", "nights_watch"]
   }
 ]
