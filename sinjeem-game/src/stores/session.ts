@@ -137,7 +137,7 @@ export const useSessionStore = defineStore('session', () => {
       }
       
       function pickN(diff: Points, n = 2) {
-        const arr = cat.entries!.filter(e => e.difficulty === diff).map(e => e.id)
+        const arr = (cat?.entries || []).filter(e => e.difficulty === diff).map(e => e.id)
         console.log(`🔍 فئة ${slug} - مستوى ${diff}: عثر على ${arr.length} أسئلة`, arr)
         
         // خلط الأسئلة المتوفرة
@@ -154,7 +154,7 @@ export const useSessionStore = defineStore('session', () => {
         console.log(`✅ فئة ${slug} - مستوى ${diff}: اختار ${result.length} أسئلة`, result)
         return result
       }
-      picks[slug] = { "200": pickN(200), "400": pickN(400), "600": pickN(600) }
+  picks[slug] = { "200": pickN(200), "400": pickN(400), "600": pickN(600) }
     }
     console.log('🎯 selectedForBoard:', picks)
     state.value.selectedForBoard = picks

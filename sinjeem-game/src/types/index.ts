@@ -16,6 +16,7 @@ export interface SeedEntry {
   a: string;
   media?: MediaItem[];      // ← جديد (اختياري)
   tags?: string[];
+  secret?: string;          // للـ QR: قيمة مخصصة تظهر على هاتف اللاعب (اختياري)
 }
 
 export interface SeedCategory {

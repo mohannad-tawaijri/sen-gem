@@ -6,19 +6,28 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+  "preview": "vite preview",
+  "extract:pictures": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract_pdf_images.ps1",
+  "pictures:map": "node ./scripts/generate_pictures_map_from_images.mjs",
+  "pictures:build": "node ./scripts/build_pictures_from_map.mjs",
+  "pictures:all": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"./scripts/extract_pdf_images.ps1; node ./scripts/generate_pictures_map_from_images.mjs; node ./scripts/build_pictures_from_map.mjs\""
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@tailwindcss/vite": "^4.1.11",
     "flowbite": "^3.1.2",
     "flowbite-vue": "^0.2.1",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^5.4.54",
+    "pdfreader": "^3.0.7",
     "pinia": "^3.0.3",
+    "qrcode": "^1.5.4",
     "tailwindcss": "^4.1.11",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.5",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.8.3",

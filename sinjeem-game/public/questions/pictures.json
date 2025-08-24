@@ -1,0 +1,20 @@
+[
+  {
+    "id": "pic-200-1",
+    "difficulty": 200,
+    "q": " ",
+    "a": "دبي",
+    "media": [
+      {
+        "type": "image",
+        "src": "/media/questions/pictures/Picture1.jpg",
+        "alt": "لغز 1"
+      }
+    ],
+    "tags": [
+      "visual",
+      "pictures"
+    ]
+  }
+
+]

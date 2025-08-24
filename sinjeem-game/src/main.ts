@@ -12,6 +12,7 @@ import BoardView from './views/BoardView.vue'
 import QuestionView from './views/QuestionView.vue'
 import AnswerView from './views/AnswerView.vue'
 import ResultsView from './views/ResultsView.vue'
+import QrRevealView from './views/QrRevealView.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
@@ -20,6 +21,8 @@ const routes = [
   { path: '/q', name: 'question', component: QuestionView },
   { path: '/answer', name: 'answer', component: AnswerView },
   { path: '/results', name: 'results', component: ResultsView },
+  // Minimal route for mobile reveal page; uses hash to carry secret
+  { path: '/reveal', name: 'reveal', component: QrRevealView },
   { path: '/question', redirect: '/q' }, // للتوافق مع الكود القديم
 ]
 

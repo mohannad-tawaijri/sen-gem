@@ -15,11 +15,29 @@ export async function loadQuestions(): Promise<SeedCategory[]> {
       if (!res.ok) throw new Error(`فشل تحميل أسئلة الفئة ${cat.slug}`)
       const entries = (await res.json()) as SeedEntry[]
       entries.forEach(checkEntry)
+
+      // ضمان وجود صورة افتراضية عند غياب الوسائط
+      const normalized = entries.map(e => {
+        const hasMedia = Array.isArray((e as any).media) && (e as any).media.length > 0
+        return hasMedia
+          ? e
+          : {
+              ...e,
+              media: [
+                {
+                  type: 'image',
+                  src: `/media/questions/${cat.slug}/default.jfif`,
+                  alt: cat.name
+                } as unknown as MediaItem
+              ]
+            }
+      })
+
       return {
         slug: cat.slug,
         name: cat.name,
         image: cat.image,
-        entries: shuffleArray(entries)
+        entries: shuffleArray(normalized)
       }
     })
   )

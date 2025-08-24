@@ -5,6 +5,7 @@ import { useSessionStore } from '../stores/session'
 import { loadQuestions } from '../services/questions'
 import { nextTick } from 'vue'
 import type { SeedCategory } from '../types'
+import QrCode from '../components/QrCode.vue'
 
 const router = useRouter()
 const s = useSessionStore()
@@ -36,8 +37,19 @@ const isVisualQuestion = computed(() => {
          currentEntry.value.tags?.includes('visual')
 })
 
+const isNoWords = computed(() => s.state.current?.slug === 'noWords')
+
+const qrUrl = computed(() => {
+  if (!currentEntry.value) return ''
+  const secret = currentEntry.value.secret || currentEntry.value.a
+  const base = window.location.origin
+  const path = '/reveal'
+  const hash = `#s=${encodeURIComponent(secret)}`
+  return `${base}${path}${hash}`
+})
+
 const timeLeft = ref(s.state.config.questionTimeSec)
-const timerInterval = ref<number | null>(null)
+const timerInterval = ref<ReturnType<typeof setInterval> | null>(null)
 
 onMounted(async () => {
   if (!s.state.current) {
@@ -141,14 +153,23 @@ function getImageUrl(url: string): string {
       <button @click="backToBoard" class="rounded-lg border px-4 py-2" :class="s.state.ui?.projector ? 'text-lg px-6 py-3' : ''">إلغاء</button>
     </header>
 
-    <!-- Question Display -->
+  <!-- Question Display -->
     <section class="rounded-xl border p-8 mb-8">
       <h1 class="text-3xl font-bold text-center mb-6" :class="s.state.ui?.projector ? 'text-5xl' : 'text-3xl'">السؤال</h1>
       
       <div class="text-xl text-center mb-6" :class="s.state.ui?.projector ? 'text-3xl' : 'text-xl'">{{ currentEntry.q }}</div>
+
+      <!-- No Words QR Mode -->
+      <div v-if="isNoWords" class="flex flex-col items-center gap-4">
+        <p class="text-center text-gray-600" :class="s.state.ui?.projector ? 'text-2xl' : 'text-base'">
+          اطلب من أحد المتسابقين مسح رمز QR بهاتفه. ستظهر له الكلمة/العبارة ويجب عليه تمثيلها بدون كلام.
+        </p>
+        <QrCode :text="qrUrl" :size="s.state.ui?.projector ? 380 : 260" />
+        <!-- <a :href="qrUrl" target="_blank" class="text-blue-600 underline break-all">{{ qrUrl }}</a> -->
+      </div>
       
       <!-- Media for visual identification questions only -->
-      <div v-if="isVisualQuestion && currentEntry.media?.length" class="space-y-4">
+  <div v-if="!isNoWords && isVisualQuestion && currentEntry.media?.length" class="space-y-4">
         <div v-for="item in currentEntry.media" :key="item.src" class="flex justify-center">
           <img v-if="item.type === 'image'" 
                :src="getImageUrl(item.src)" 
