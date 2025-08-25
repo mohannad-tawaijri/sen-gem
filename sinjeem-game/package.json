@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+  "build": "vue-tsc -b && vite build",
   "preview": "vite preview",
+  "sync:ucl": "node ./scripts/sync_ucl_difficulties.mjs",
   "extract:pictures": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract_pdf_images.ps1",
   "pictures:map": "node ./scripts/generate_pictures_map_from_images.mjs",
   "pictures:build": "node ./scripts/build_pictures_from_map.mjs",
