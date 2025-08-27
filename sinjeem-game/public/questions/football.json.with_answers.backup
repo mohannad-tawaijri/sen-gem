@@ -7,20 +7,72 @@
     "tags": ["football", "rules"]
   },
  
-
+  {
+    "id": "football-400-007",
+    "difficulty": 400,
+    "q": "من هو أكثر لاعب تتويجًا بالدوري الإسباني؟",
+    "tags": ["football", "laliga", "records"]
+  },
   {
     "id": "football-400-013",
     "difficulty": 400,
     "q": "من هو هداف كأس العالم 2006؟",
     "tags": ["football", "world_cup", "records"]
   },
-
-
- 
-
-  
- 
-
+  {
+    "id": "football-400-018",
+    "difficulty": 400,
+    "q": "ما اسم ديربي روما بين لاتسيو وروما؟",
+    "tags": ["football", "derbies", "seriea"]
+  },
+  {
+    "id": "football-400-020",
+    "difficulty": 400,
+    "q": "كم لقبًا يمتلك ميلان في دوري أبطال أوروبا؟",
+    "tags": ["football", "uefa", "clubs", "records"]
+  },
+  {
+    "id": "football-400-024",
+    "difficulty": 400,
+    "q": "أي نادٍ يملك أكبر عدد من ألقاب الدوري الفرنسي؟",
+    "tags": ["football", "ligue1", "records", "clubs"]
+  },
+  {
+    "id": "football-400-027",
+    "difficulty": 400,
+    "q": "من هو الهداف التاريخي لباريس سان جيرمان؟",
+    "tags": ["football", "ligue1", "records", "clubs"]
+  },
+  {
+    "id": "football-400-028",
+    "difficulty": 400,
+    "q": "ما اسم ديربي الأندلس بين إشبيلية وريال بيتيس؟",
+    "tags": ["football", "derbies", "laliga"]
+  },
+  {
+    "id": "football-400-032",
+    "difficulty": 400,
+    "q": "من أكثر لاعب تتويجًا بالكرة الذهبية؟",
+    "tags": ["football", "awards", "records"]
+  },
+  {
+    "id": "football-400-033",
+    "difficulty": 400,
+    "q": "أي فريق حقق الثلاثية التاريخية في موسم 2014-15؟",
+    "tags": ["football", "uefa", "records", "clubs"]
+  },
+  {
+    "id": "football-400-034",
+    "difficulty": 400,
+    "q": "من هو الهداف التاريخي لبطولة أمم أوروبا (اليورو)؟",
+    "tags": ["football", "uefa", "records", "national_teams"]
+  },
+  {
+    "id": "football-400-036",
+    "difficulty": 400,
+    "q": "أي منتخب فاز بكوبا أمريكا 2021؟",
+    "tags": ["football", "conmebol", "national_teams", "history"]
+  },
   {
     "id": "football-400-040",
     "difficulty": 400,
@@ -33,7 +85,12 @@
     "q": "من هو أول لاعب يسجل في جميع مباريات دور مجموعات دوري الأبطال بموسم واحد؟",
     "tags": ["football", "uefa", "records"]
   },
-
+  {
+    "id": "football-600-003",
+    "difficulty": 600,
+    "q": "ما النادي الأكثر خسارة لنهائي دوري أبطال أوروبا؟",
+    "tags": ["football", "uefa", "records", "clubs"]
+  },
   {
     "id": "football-600-006",
     "difficulty": 600,
@@ -64,32 +121,78 @@
     "q": "ما أطول سلسلة مباريات بلا خسارة لمنتخب في التاريخ؟",
     "tags": ["football", "records", "national_teams"]
   },
- 
-
- 
+  {
+    "id": "football-600-019",
+    "difficulty": 600,
+    "q": "من هو اللاعب الذي سجل في 5 نسخ مختلفة من كأس العالم؟",
+    "tags": ["football", "world_cup", "records", "players"]
+  },
+  {
+    "id": "football-600-020",
+    "difficulty": 600,
+    "q": "ما أكثر منتخب بلوغًا للمباراة النهائية بدون تحقيق اللقب؟",
+    "tags": ["football", "world_cup", "records", "national_teams"]
+  },
+  {
+    "id": "football-600-021",
+    "difficulty": 600,
+    "q": "ما النادي الذي حقق أكبر عدد من الألقاب القارية المعتمدة (مجمعة)؟",
+    "tags": ["football", "records", "clubs", "confederations"]
+  },
   {
     "id": "football-600-026",
     "difficulty": 600,
     "q": "من هو أكبر لاعب سجل هدفًا في نهائيات كأس العالم؟",
     "tags": ["football", "world_cup", "records", "players"]
   },
-
- 
+  {
+    "id": "football-600-027",
+    "difficulty": 600,
+    "q": "ما النادي الذي فاز على برشلونة بمجموع 7-0 في نصف نهائي 2013 بدوري الأبطال؟",
+    "tags": ["football", "uefa", "history"]
+  },
+  {
+    "id": "football-600-029",
+    "difficulty": 600,
+    "q": "من المدرب الأكثر خوضًا لنهائيات دوري الأبطال؟",
+    "tags": ["football", "uefa", "coaches", "records"]
+  },
   {
     "id": "football-600-030",
     "difficulty": 600,
     "q": "ما أطول سلسلة انتصارات لمنتخب في المباريات الرسمية؟",
     "tags": ["football", "records", "national_teams"]
   },
- 
+  {
+    "id": "football-600-034",
+    "difficulty": 600,
+    "q": "أي لاعب يملك أكبر عدد من المباريات في اليورو (النهائيات)؟",
+    "tags": ["football", "uefa", "euro", "records", "players"]
+  },
   {
     "id": "football-600-036",
     "difficulty": 600,
     "q": "من هو الحارس الأكثر تصديًا لركلات الترجيح في دوري الأبطال؟",
     "tags": ["football", "uefa", "goalkeepers", "records"]
   },
-  
-
+  {
+    "id": "football-600-037",
+    "difficulty": 600,
+    "q": "ما أول منتخب فاز بكأس العالم خارج قارته؟",
+    "tags": ["football", "world_cup", "history"]
+  },
+  {
+    "id": "football-600-039",
+    "difficulty": 600,
+    "q": "من هو اللاعب الذي سجل أسرع هاتريك دولي رسمي؟",
+    "tags": ["football", "records", "national_teams", "goals"]
+  },
+  {
+    "id": "football-600-041",
+    "difficulty": 600,
+    "q": "ما أكبر فوز في تاريخ الكلاسيكو الرسمي بين ريال مدريد وبرشلونة؟",
+    "tags": ["football", "laliga", "records", "derbies"]
+  },
   {
     "id": "football-600-042",
     "difficulty": 600,
@@ -102,15 +205,61 @@
     "q": "ما أول نهائي أمم أوروبا يُحسم بركلات الترجيح؟",
     "tags": ["football", "uefa", "euro", "history", "finals"]
   },
- 
-
-
- 
-
- 
-  
-
-
+  {
+    "id": "football-600-045",
+    "difficulty": 600,
+    "q": "ما أول نسخة شهدت استخدام تقنية خط المرمى في كأس العالم؟",
+    "tags": ["football", "world_cup", "technology", "history"]
+  },
+  {
+    "id": "football-600-046",
+    "difficulty": 600,
+    "q": "أي لاعب يملك أكبر عدد من الهاتريك الدولية مع منتخب بلاده؟",
+    "tags": ["football", "records", "national_teams", "players"]
+  },
+  {
+    "id": "football-600-047",
+    "difficulty": 600,
+    "q": "من هو أكثر مدرب تتويجًا بالألقاب الرسمية في التاريخ؟",
+    "tags": ["football", "coaches", "records"]
+  },
+  {
+    "id": "football-600-048",
+    "difficulty": 600,
+    "q": "ما النادي الأكثر تتويجًا بالدوري المحلي في التاريخ؟",
+    "tags": ["football", "records", "clubs", "leagues"]
+  },
+  {
+    "id": "football-600-049",
+    "difficulty": 600,
+    "q": "من هو اللاعب الذي سجل في كل دقائق المباراة من 1 إلى 90 عبر مسيرته؟",
+    "tags": ["football", "records", "players"]
+  },
+  {
+    "id": "football-600-050",
+    "difficulty": 600,
+    "q": "ما أول كأس عالم شهد استخدام تقنية VAR كاملة؟",
+    "tags": ["football", "world_cup", "technology", "history"]
+  },
+  {
+    "id": "football-600-051",
+    "difficulty": 600,
+    "q": "من هو اللاعب الأكثر مشاركة في نهائيات كأس العالم (دقائق لعب)؟",
+    "tags": ["football", "world_cup", "records", "players"]
+  },
+  {
+    "id": "football-600-052",
+    "difficulty": 600,
+    "q": "أي منتخب يملك أكبر عدد من الألقاب القارية للمنتخبات؟",
+    "tags": ["football", "records", "national_teams", "confederations"]
+  },
+  {
+    "id": "football-600-053",
+    "difficulty": 600,
+    "q": "من هو أكثر لاعب صناعةً للأهداف في تاريخ كأس العالم للأندية؟",
+    "tags": ["football", "fifa", "club_world_cup", "records"]
+  }
+  ,
   {
     "id": "football-200-016",
     "difficulty": 200,
@@ -565,206 +714,16 @@
     "q": "أكثر لاعب مشاركة في مباريات كأس العالم؟",
     "tags": ["football", "world_cup", "records"]
   },
-
-
-  {
-    "id": "football-600-104",
-    "difficulty": 600,
-    "q": "من يتشارك الرقم القياسي لكونه الهداف التاريخي لبطولة كوبا أمريكا؟",
-    "tags": [
-      "football",
-      "conmebol",
-      "records",
-      "players"
-    ]
-  },
-  {
-    "id": "football-600-105",
-    "difficulty": 600,
-    "q": "من هو اللاعب الذي فاز بجائزة أفضل لاعب في كأس العالم 1994؟",
-    "tags": [
-      "football",
-      "world_cup",
-      "awards",
-      "players"
-    ]
-  },
-  {
-    "id": "football-600-106",
-    "difficulty": 600,
-    "q": "ما هو النادي الفرنسي الذي وصل لنهائي دوري أبطال أوروبا مرتين متتاليتين في 1990 و 1991 وخسرهما؟",
-    "tags": [
-      "football",
-      "uefa",
-      "clubs",
-      "history"
-    ]
-  },
-
-  {
-    "id": "football-600-108",
-    "difficulty": 600,
-    "q": "ما هو النادي الذي فاز بأول نسخة من بطولة الدوري الأوروبي (بمسماها الجديد) عام 2010؟",
-    "tags": [
-      "football",
-      "uefa",
-      "europa_league",
-      "clubs"
-    ]
-  },
-  {
-    "id": "football-600-109",
-    "difficulty": 600,
-    "q": "من هو اللاعب الذي يحمل الرقم القياسي لأكبر عدد من المباريات في الدوري الإيطالي (Serie A)؟",
-    "tags": [
-      "football",
-      "seriea",
-      "records",
-      "players"
-    ]
-  },
-  {
-    "id": "football-400-110",
-    "difficulty": 400,
-    "q": "من هو المدرب الذي قاد منتخب اليونان للفوز المفاجئ ببطولة أمم أوروبا 2004؟",
-    "tags": [
-      "football",
-      "euro",
-      "coaches",
-      "history"
-    ]
-  },
-  {
-    "id": "football-600-111",
-    "difficulty": 600,
-    "q": "ما هو النادي الذي حقق لقب الدوري الهولندي 3 مرات متتالية بين عامي 2005 و 2007؟",
-    "tags": [
-      "football",
-      "eredivisie",
-      "clubs",
-      "history"
-    ]
-  },
- 
  
  
   {
-    "id": "football-600-115",
+    "id": "football-600-043",
     "difficulty": 600,
-    "q": "ما هو النادي الذي فاز بلقب الدوري الألماني (البوندسليغا) بشكل مفاجئ في موسم 2008-2009؟",
-    "tags": [
-      "football",
-      "bundesliga",
-      "clubs",
-      "history"
-    ]
-  },
-  {
-    "id": "football-600-116",
-    "difficulty": 600,
-    "q": "من هو اللاعب الذي يحمل الرقم القياسي لأكبر عدد من الأهداف في نسخة واحدة من بطولة كوبا أمريكا؟",
-    "tags": ["football", "conmebol", "records", "players"]
-  },
-  {
-    "id": "football-600-117",
-    "difficulty": 600,
-    "q": "ما هو المنتخب الذي فاز بأول نسخة من بطولة كأس القارات عام 1992 (بمسماها القديم كأس الملك فهد)؟",
-    "tags": ["football", "fifa", "confederations_cup", "history"]
-  },
-  {
-    "id": "football-600-118",
-    "difficulty": 600,
-    "q": "من هو المدرب الذي قاد نادي لاتسيو للفوز بلقب الدوري الإيطالي موسم 1999-2000؟",
-    "tags": ["football", "seriea", "coaches", "history"]
-  },
-  {
-    "id": "football-600-119",
-    "difficulty": 600,
-    "q": "ما هو النادي الذي فاز بأول نسخة من بطولة كأس الكؤوس الأوروبية عام 1961؟",
-    "tags": ["football", "uefa", "history", "clubs"]
-  },
-  {
-    "id": "football-600-120",
-    "difficulty": 600,
-    "q": "من هو اللاعب الذي سجل هدف الفوز لمنتخب الدنمارك في نهائي يورو 1992؟",
-    "tags": ["football", "euro", "players", "history"]
-  },
-  {
-    "id": "football-600-121",
-    "difficulty": 600,
-    "q": "ما هو النادي الذي فاز بلقب الدوري الأرجنتيني (أبرتورا) عام 2002 بقيادة المدرب أميريكو غاييغو، محققاً اللقب بعد غياب 35 عاماً؟",
-    "tags": ["football", "argentina", "clubs", "history"]
-  },
-  {
-    "id": "football-600-122",
-    "difficulty": 600,
-    "q": "من هو اللاعب الذي فاز بجائزة الفتى الذهبي (Golden Boy) عام 2008؟",
-    "tags": ["football", "awards", "players"]
-  },
-  {
-    "id": "football-600-123",
-    "difficulty": 600,
-    "q": "من هو اللاعب الوحيد الذي سجل في نهائي دوري أبطال أوروبا، نهائي كأس الاتحاد الإنجليزي، نهائي كأس الرابطة، ونهائي كأس الاتحاد الأوروبي؟",
-    "tags": ["football", "records", "players", "uefa"]
-  },
-  {
-    "id": "football-600-124",
-    "difficulty": 600,
-    "q": "من هو البلد الذي فاز بأول بطولة كأس عالم للسيدات على الإطلاق عام 1991؟",
-    "tags": ["football", "world_cup", "women", "history"]
-  },
-  {
-    "id": "football-600-125",
-    "difficulty": 600,
-    "q": "من هو المدرب الذي فاز بكأس ليبرتادوريس مع ناديين مختلفين؟",
-    "tags": ["football", "conmebol", "coaches", "records"]
-  },
-  {
-    "id": "football-600-126",
-    "difficulty": 600,
-    "q": "من هو اللاعب الذي يحمل الرقم القياسي لأكبر عدد من الأهداف في موسم واحد في الدوري الإسباني (باستثناء ميسي ورونالدو)؟",
-    "tags": ["football", "laliga", "records", "players"]
-  },
-  {
-    "id": "football-400-127",
-    "difficulty": 400,
-    "q": "من هو اللاعب الذي فاز بجائزة الكرة الذهبية ثلاث مرات متتالية في الثمانينيات؟",
-    "tags": ["football", "awards", "players", "history"]
-  },
-  {
-    "id": "football-400-128",
-    "difficulty": 400,
-    "q": "ما هو النادي الذي فاز بأول نسخة من كأس العالم للأندية عام 2000؟",
-    "tags": ["football", "fifa", "club_world_cup", "history"]
-  },
-  {
-    "id": "football-400-129",
-    "difficulty": 400,
-    "q": "من هو اللاعب الذي سجل هدف الفوز لفرنسا في نهائي يورو 2000 بالهدف الذهبي؟",
-    "tags": ["football", "euro", "players", "history"]
-  },
-  {
-    "id": "football-400-130",
-    "difficulty": 400,
-    "q": "ما هو المنتخب الذي خسر نهائي كأس العالم مرتين متتاليتين في 1982 و 1986؟",
-    "tags": ["football", "world_cup", "history", "national_teams"]
-  },
-  {
-    "id": "football-400-131",
-    "difficulty": 400,
-    "q": "من هو اللاعب الذي يحمل الرقم القياسي لأكبر عدد من المشاركات مع منتخب ألمانيا؟",
-    "tags": ["football", "national_teams", "records", "players"]
-  },
-  {
-    "id": "football-400-132",
-    "difficulty": 400,
-    "q": "من هو الهداف التاريخي لبطولة أمم أوروبا (اليورو) قبل كريستيانو رونالدو؟",
-    "tags": ["football", "euro", "records", "players"]
-  },
-  {
-    "id": "football-400-133",
-    "difficulty": 400,
-    "q": "ما هو النادي الذي فاز بالدوري الإنجليزي الممتاز في موسمه الأول على الإطلاق 1992-1993؟",
-    "tags": ["football", "premier_league", "history", "clubs"]
+    "q": "من فاز بكأس العالم 1962؟",
+    "tags": ["football", "world_cup", "history"]
   }
+ 
+  
+ 
+
 ]
