@@ -14,7 +14,10 @@ export interface SeedEntry {
   difficulty: Points;
   q: string;
   a: string;
-  media?: MediaItem[];      // ← جديد (اختياري)
+  media?: MediaItem[];      // ← عام: تُستخدم كسلوك افتراضي للسؤال/الإجابة
+  // دعم صور منفصلة للسؤال والإجابة (اختياري)
+  mediaQuestion?: MediaItem[]; // تُعرض في شاشة السؤال (إن وُجدت تتقدم على media)
+  mediaAnswer?: MediaItem[];   // تُعرض في شاشة الإجابة (إن وُجدت تتقدم على media)
   tags?: string[];
   secret?: string;          // للـ QR: قيمة مخصصة تظهر على هاتف اللاعب (اختياري)
 }

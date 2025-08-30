@@ -30,14 +30,16 @@ const currentEntry = computed(() => {
   return entry
 })
 
-// Check if this is a visual identification question
-const isVisualQuestion = computed(() => {
-  if (!currentEntry.value) return false
-  return currentEntry.value.q.includes('من هذا الشخص؟') || 
-         currentEntry.value.tags?.includes('visual')
-})
+// (legacy heuristic removed; now we show media if it exists)
 
 const isNoWords = computed(() => s.state.current?.slug === 'noWords')
+
+// Show media for any question that has mediaQuestion or media (except noWords which uses QR)
+const showQuestionMedia = computed(() => {
+  if (!currentEntry.value) return false
+  if (isNoWords.value) return false
+  return !!(currentEntry.value.mediaQuestion?.length || currentEntry.value.media?.length)
+})
 
 const qrUrl = computed(() => {
   if (!currentEntry.value) return ''
@@ -89,7 +91,8 @@ function revealAnswer() {
     question: currentEntry.value.q,
     answer: currentEntry.value.a,
     points: s.state.current!.difficulty,
-    media: currentEntry.value.media
+    // استخدم mediaAnswer إن وُجدت وإلا فـ media العامة
+    media: currentEntry.value.mediaAnswer?.length ? currentEntry.value.mediaAnswer : currentEntry.value.media
   }
   
   router.push({ name: 'answer' })
@@ -127,8 +130,10 @@ function getImageUrl(url: string): string {
     console.log('🔧 استخدام صورة افتراضية بديلة للطلبات المفقودة')
     return 'https://via.placeholder.com/800x600?text=لا+صورة'
   }
-  // For local images, ensure a single leading slash
-  const cleanUrl = url.replace(/^\/+/, '')
+  // For local images, normalize leading patterns like "./" or multiple slashes
+  let cleanUrl = url.trim()
+  cleanUrl = cleanUrl.replace(/^(\.\/)+/, '') // remove leading ./ occurrences
+  cleanUrl = cleanUrl.replace(/^\/+/, '') // then remove any leading slashes
   const finalUrl = `/${cleanUrl}`
   console.log(`🖼️ مسار الصورة المحلي: ${url} → ${finalUrl}`)
   return finalUrl
@@ -168,9 +173,9 @@ function getImageUrl(url: string): string {
         <!-- <a :href="qrUrl" target="_blank" class="text-blue-600 underline break-all">{{ qrUrl }}</a> -->
       </div>
       
-      <!-- Media for visual identification questions only -->
-  <div v-if="!isNoWords && isVisualQuestion && currentEntry.media?.length" class="space-y-4">
-        <div v-for="item in currentEntry.media" :key="item.src" class="flex justify-center">
+    <!-- Media: show whenever the question has media (excluding noWords QR mode) -->
+  <div v-if="showQuestionMedia" class="space-y-4">
+        <div v-for="item in (currentEntry.mediaQuestion?.length ? currentEntry.mediaQuestion : currentEntry.media)" :key="item.src" class="flex justify-center">
           <img v-if="item.type === 'image'" 
                :src="getImageUrl(item.src)" 
                :alt="item.alt || 'صورة السؤال'" 
