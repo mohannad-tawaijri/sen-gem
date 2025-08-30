@@ -155,39 +155,38 @@ function getImageUrl(url: string): string {
   <main v-else-if="currentEntry" class="max-w-4xl mx-auto p-6">
     <!-- Timer Header -->
     <header class="flex items-center justify-between mb-6">
-      <div class="text-2xl font-bold" :class="s.state.ui?.projector ? 'text-3xl' : 'text-2xl'">{{ s.state.current?.difficulty }} نقطة</div>
-      <div class="text-xl" :class="['text-gray-600', s.state.ui?.projector ? 'text-2xl' : 'text-xl']">
+      <div class="heading text-2xl">{{ s.state.current?.difficulty }} نقطة</div>
+      <div class="text-xl font-mono px-3 py-1 rounded-lg glass">
         {{ Math.floor(elapsed / 60) }}:{{ (elapsed % 60).toString().padStart(2, '0') }}
       </div>
-      <button @click="backToBoard" class="rounded-lg border px-4 py-2" :class="s.state.ui?.projector ? 'text-lg px-6 py-3' : ''">إلغاء</button>
+      <button @click="backToBoard" class="btn-secondary">إلغاء</button>
     </header>
 
     <!-- Lifelines visible during the question -->
-    <LifelineBar v-if="!s.state.ui?.projector" />
+  <LifelineBar />
 
   <!-- Question Display -->
-    <section class="rounded-xl border p-8 mb-8">
-      <h1 class="text-3xl font-bold text-center mb-6" :class="s.state.ui?.projector ? 'text-5xl' : 'text-3xl'">السؤال</h1>
+    <section class="rounded-xl card p-8 mb-8">
+      <h1 class="heading text-center mb-6 text-3xl">السؤال</h1>
       
-      <div class="text-xl text-center mb-6" :class="s.state.ui?.projector ? 'text-3xl' : 'text-xl'">{{ currentEntry.q }}</div>
+      <div class="text-xl text-center mb-6">{{ currentEntry.q }}</div>
 
       <!-- No Words QR Mode -->
       <div v-if="isNoWords" class="flex flex-col items-center gap-4">
-        <p class="text-center text-gray-600" :class="s.state.ui?.projector ? 'text-2xl' : 'text-base'">
+        <p class="text-center text-gray-300 text-base">
           اطلب من أحد المتسابقين مسح رمز QR بهاتفه. ستظهر له الكلمة/العبارة ويجب عليه تمثيلها بدون كلام.
         </p>
-        <QrCode :text="qrUrl" :size="s.state.ui?.projector ? 380 : 260" />
-        <!-- <a :href="qrUrl" target="_blank" class="text-blue-600 underline break-all">{{ qrUrl }}</a> -->
+        <QrCode :text="qrUrl" :size="260" />
+  <!-- <a :href="qrUrl" target="_blank" class="text-blue-600 underline break-all">{{ qrUrl }}</a> -->
       </div>
       
     <!-- Media: show whenever the question has media (excluding noWords QR mode) -->
   <div v-if="showQuestionMedia" class="space-y-4">
         <div v-for="item in (currentEntry.mediaQuestion?.length ? currentEntry.mediaQuestion : currentEntry.media)" :key="item.src" class="flex justify-center">
-          <img v-if="item.type === 'image'" 
+    <img v-if="item.type === 'image'" 
                :src="getImageUrl(item.src)" 
                :alt="item.alt || 'صورة السؤال'" 
-               class="max-w-full rounded-lg shadow-lg"
-               :class="s.state.ui?.projector ? 'max-h-96' : 'max-h-80'"
+      class="max-w-full rounded-lg shadow-2xl max-h-80"
                @error="handleImageError"
                @load="console.log('✅ تم تحميل الصورة:', item.src)" />
         </div>
@@ -197,8 +196,7 @@ function getImageUrl(url: string): string {
     <!-- Answer Button -->
     <section class="text-center">
       <button @click="revealAnswer" 
-              class="rounded-xl bg-green-600 text-white px-8 py-4 font-semibold hover:bg-green-700 transition"
-              :class="s.state.ui?.projector ? 'text-2xl px-12 py-6' : 'text-xl'">
+              class="btn-primary text-xl">
         عرض الإجابة
       </button>
     </section>

@@ -26,8 +26,7 @@ export const useSessionStore = defineStore('session', () => {
     selectedForBoard: undefined,
     usedIds: {},
     current: undefined,
-    lifelineOverlay: { active: false, team: 'A', kind: 'call', secondsLeft: 0, total: 0 },
-    ui: { projector: false },
+  lifelineOverlay: { active: false, team: 'A', kind: 'call', secondsLeft: 0, total: 0 },
     status: 'active',
     endedAt: undefined
   })
@@ -102,8 +101,7 @@ export const useSessionStore = defineStore('session', () => {
       selectedForBoard: undefined,
       usedIds: {},
       current: undefined,
-      lifelineOverlay: { active: false, team: 'A', kind: 'call', secondsLeft: 0, total: 0 },
-      ui: { projector: false },
+  lifelineOverlay: { active: false, team: 'A', kind: 'call', secondsLeft: 0, total: 0 },
       status: 'active',
       endedAt: undefined
     }
@@ -246,14 +244,7 @@ export const useSessionStore = defineStore('session', () => {
     saveState();
   }
 
-  function setProjector(on: boolean) { 
-    state.value.ui = { ...(state.value.ui||{}), projector: on };
-    saveState();
-  }
   
-  function toggleProjector() { 
-    setProjector(!(state.value.ui?.projector));
-  }
 
   // تحميل الحالة عند إنشاء المخزن
   loadState()
@@ -264,7 +255,6 @@ export const useSessionStore = defineStore('session', () => {
     initBoardPicks, openCell, revealAnswer, award, cellUsed,
     currentAnswer,
     canUseLifeline, useTwoAnswers, startCallAFriend, tickOverlay, closeOverlay,
-    setProjector, toggleProjector,
     endGame, resumeGame
   }
 })

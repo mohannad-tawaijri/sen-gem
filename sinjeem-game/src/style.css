@@ -1,3 +1,76 @@
 @import "tailwindcss";
 
 html[dir="rtl"] body { direction: rtl; }
+
+:root {
+	--glass-bg: 255 255 255 / 0.06; /* rgba */
+	--glass-brd: 255 255 255 / 0.15;
+	--card-bg: 17 24 39 / 0.65; /* slate-900 */
+}
+
+.glass {
+	background: rgba(var(--glass-bg));
+	border: 1px solid rgba(var(--glass-brd));
+	backdrop-filter: blur(10px);
+}
+
+.card {
+	background: rgba(var(--card-bg));
+	border: 1px solid rgba(255,255,255,0.08);
+	box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.btn-primary {
+	display: inline-flex; align-items: center; justify-content: center;
+	border-radius: 0.75rem; 
+	background-image: linear-gradient(90deg, #4f46e5, #c026d3);
+	color: #fff; font-weight: 600; padding: 0.75rem 1.25rem;
+	box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25);
+	transition: all 150ms ease-in-out;
+}
+.btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); }
+
+.btn-secondary {
+	display: inline-flex; align-items: center; justify-content: center;
+	border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.2);
+	background: rgba(255,255,255,0.06); color: #fff; font-weight: 500;
+	padding: 0.75rem 1.25rem; transition: background 150ms ease-in-out;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+.btn-danger {
+	display: inline-flex; align-items: center; justify-content: center;
+	border-radius: 0.75rem; background: #e11d48; color: #fff; font-weight: 600;
+	padding: 0.75rem 1.25rem; box-shadow: 0 10px 20px rgba(225, 29, 72, 0.25);
+	transition: filter 150ms ease-in-out;
+}
+.btn-danger:hover { filter: brightness(1.05); }
+
+.heading {
+	font-weight: 800; letter-spacing: -0.02em;
+	background-image: linear-gradient(90deg, #ffffff, #e0e7ff, #f5d0fe);
+	-webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* Calmer primary button variant */
+.btn-calm {
+	display: inline-flex; align-items: center; justify-content: center;
+	border-radius: 0.75rem; border: 1px solid rgba(99, 102, 241, 0.45); /* indigo-500 */
+	background: rgba(255,255,255,0.06); color: #fff; font-weight: 700;
+	padding: 0.9rem 1.4rem; box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+	transition: all 160ms ease-in-out;
+}
+.btn-calm:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); border-color: rgba(99,102,241,0.7); }
+.btn-calm:active { transform: translateY(0); }
+
+/* Prominent CTA button (distinct from back/secondary) */
+.btn-cta {
+	display: inline-flex; align-items: center; justify-content: center;
+	border-radius: 0.85rem; border: 1px solid rgba(16,185,129,0.35); /* emerald */
+	background: #10b981; color: #0b1220; /* dark text improves contrast on solid */
+	font-weight: 800; letter-spacing: -0.01em; padding: 0.95rem 1.5rem;
+	box-shadow: 0 10px 24px rgba(16,185,129,0.35);
+	transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease;
+}
+.btn-cta:hover { filter: brightness(1.05); transform: translateY(-1px); box-shadow: 0 12px 28px rgba(16,185,129,0.45); }
+.btn-cta:active { transform: translateY(0); }

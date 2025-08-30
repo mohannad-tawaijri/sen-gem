@@ -101,48 +101,38 @@ function handleImageError(event: Event) {
 <template>
   <main class="max-w-[1200px] mx-auto p-6">
     <header class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold">لوحة الأسئلة</h1>
+      <h1 class="heading text-3xl">لوحة الأسئلة</h1>
       <div class="flex items-center gap-2">
-        <!-- End Game Button -->
-        <button v-if="!s.state.ui?.projector"
-                class="rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 font-semibold transition-colors"
-                @click="endGame">
-          إنهاء اللعبة
-        </button>
-        <button class="rounded-lg border px-3 py-2"
-                @click="s.toggleProjector()">
-          {{ s.state.ui?.projector ? 'خروج من وضع العرض' : 'وضع العرض' }}
-        </button>
-        <button v-if="!s.state.ui?.projector"
-                class="rounded-lg border px-4 py-2"
-                @click="backToSetup()">رجوع للإعداد</button>
+        <button class="btn-danger" @click="endGame">إنهاء اللعبة</button>
+        <button class="btn-secondary" @click="backToSetup()">رجوع للإعداد</button>
       </div>
     </header>
 
     <!-- النقاط -->
-  <LifelineBar v-if="!s.state.ui?.projector" :disabled="true" />
+    <div class="glass rounded-2xl p-4 mb-4">
+      <LifelineBar :disabled="true" />
+    </div>
     
     <section class="grid grid-cols-2 gap-4 mb-6">
-      <div class="rounded-xl border p-4 text-center">
+      <div class="rounded-xl card p-4 text-center">
         <div class="text-sm text-gray-500 mb-1">فريق أ</div>
-        <div class="text-xl font-bold">{{ s.state.teams.A.name }}</div>
-        <div class="text-2xl mt-1">{{ s.state.teams.A.score }}</div>
+        <div class="text-xl font-bold text-white">{{ s.state.teams.A.name }}</div>
+        <div class="text-3xl mt-1 text-blue-300 font-extrabold">{{ s.state.teams.A.score }}</div>
       </div>
-      <div class="rounded-xl border p-4 text-center">
+      <div class="rounded-xl card p-4 text-center">
         <div class="text-sm text-gray-500 mb-1">فريق ب</div>
-        <div class="text-xl font-bold">{{ s.state.teams.B.name }}</div>
-        <div class="text-2xl mt-1">{{ s.state.teams.B.score }}</div>
+        <div class="text-xl font-bold text-white">{{ s.state.teams.B.name }}</div>
+        <div class="text-3xl mt-1 text-emerald-300 font-extrabold">{{ s.state.teams.B.score }}</div>
       </div>
     </section>
 
     <!-- الشبكة -->
     <section class="overflow-x-auto">
-      <div class="grid grid-cols-6 gap-3 min-w-[900px]" 
-           :class="s.state.ui?.projector ? 'transform scale-105' : ''">
+  <div class="grid grid-cols-6 gap-3 min-w-[900px]">
         <!-- رؤوس الأعمدة (الفئات) -->
-        <div v-for="cat in selectedCats" :key="cat.slug"
-             class="rounded-md overflow-hidden bg-gray-900 text-white text-center">
-          <div class="aspect-[16/9] bg-black/20 flex items-center justify-center">
+  <div v-for="cat in selectedCats" :key="cat.slug"
+       class="rounded-md overflow-hidden card text-white text-center">
+    <div class="aspect-[16/9] bg-black/10 flex items-center justify-center">
             <img v-if="cat.image" 
                  :src="cat.image" 
                  :alt="cat.name" 
@@ -150,7 +140,7 @@ function handleImageError(event: Event) {
                  @error="handleImageError" />
             <div v-else class="text-gray-400 text-xs">{{ cat.name }}</div>
           </div>
-          <div class="p-2 font-semibold" :class="s.state.ui?.projector ? 'text-lg' : 'text-sm'">{{ cat.name }}</div>
+          <div class="p-2 font-semibold text-sm">{{ cat.name }}</div>
         </div>
 
         <!-- صفوف النقاط (200,200,400,400,600,600) -->
@@ -159,12 +149,17 @@ function handleImageError(event: Event) {
             v-for="cat in selectedCats"
             :key="cat.slug + '-' + rowIdx"
             type="button"
-            class="rounded-md font-semibold transition-all duration-300"
+            class="rounded-xl font-bold transition-all duration-200 border"
             :class="[
               isDisabled(cat.slug, POINTS[rowIdx-1], rowIdx-1) 
-                ? 'bg-gray-400 text-gray-600 opacity-40 saturate-50 cursor-not-allowed' 
-                : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105',
-              s.state.ui?.projector ? 'text-2xl py-8' : 'text-xl py-6'
+                ? 'bg-white/5 text-gray-400 opacity-60 cursor-not-allowed border-white/10' 
+                : [
+                    'bg-white/5 text-white hover:bg-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5',
+                    POINTS[rowIdx-1]===200 ? 'border-indigo-400/30 hover:border-indigo-400/60' 
+                    : POINTS[rowIdx-1]===400 ? 'border-amber-400/30 hover:border-amber-400/60' 
+                    : 'border-rose-400/30 hover:border-rose-400/60'
+                  ],
+              'text-xl py-6'
             ]"
             :disabled="isDisabled(cat.slug, POINTS[rowIdx-1], rowIdx-1)"
             @click="onCellClick(cat.slug, POINTS[rowIdx-1], rowIdx-1)"

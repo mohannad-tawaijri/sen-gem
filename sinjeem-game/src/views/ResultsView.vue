@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
+  <div class="min-h-screen">
     <!-- Header -->
     <header class="p-6 text-center border-b border-white/20">
-      <h1 class="text-3xl md:text-5xl font-bold mb-2">نتائج المباراة</h1>
+      <h1 class="heading text-3xl md:text-5xl mb-2">نتائج المباراة</h1>
       <p class="text-xl text-blue-200">{{ endedAt ? formatDate(endedAt) : '' }}</p>
     </header>
 
@@ -10,19 +10,19 @@
     <div class="container mx-auto px-6 py-8">
       <!-- Winner Announcement -->
       <div class="text-center mb-8">
-        <div v-if="winner" class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black p-6 rounded-xl shadow-2xl inline-block">
+  <div v-if="winner" class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black p-6 rounded-xl shadow-2xl inline-block">
           <h2 class="text-4xl font-bold mb-2">🎉 الفائز 🎉</h2>
           <p class="text-3xl font-semibold">{{ teams[winner].name }}</p>
           <p class="text-xl mt-2">بنتيجة {{ teams[winner].score }} نقطة</p>
         </div>
-        <div v-else class="bg-gradient-to-r from-gray-400 to-gray-600 text-white p-6 rounded-xl shadow-2xl inline-block">
+  <div v-else class="bg-gradient-to-r from-gray-400 to-gray-600 text-white p-6 rounded-xl shadow-2xl inline-block">
           <h2 class="text-4xl font-bold mb-2">🤝 تعادل 🤝</h2>
           <p class="text-2xl">كلا الفريقين حقق {{ teams.A.score }} نقطة</p>
         </div>
       </div>
 
       <!-- Teams Scores -->
-      <div class="grid md:grid-cols-2 gap-6 mb-8">
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
         <!-- Team A -->
         <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
           <div class="text-center">
@@ -49,7 +49,7 @@
       </div>
 
       <!-- Game Statistics -->
-      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+  <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
         <h3 class="text-2xl font-bold mb-4 text-center">إحصائيات المباراة</h3>
         <div class="grid md:grid-cols-3 gap-4 text-center">
           <div>
@@ -82,18 +82,12 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex flex-col md:flex-row gap-4 justify-center">
+  <div class="flex flex-col md:flex-row gap-4 justify-center">
         <button 
           @click="resumeGame"
           class="bg-green-600 hover:bg-green-700 px-8 py-3 rounded-xl font-bold text-lg transition-colors"
         >
           استئناف المباراة
-        </button>
-        <button 
-          @click="newGame"
-          class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold text-lg transition-colors"
-        >
-          مباراة جديدة
         </button>
         <button 
           @click="goToSetup"
@@ -178,11 +172,6 @@ const getCategoryName = (slug: string) => {
 // Actions
 const resumeGame = () => {
   sessionStore.resumeGame()
-  router.push('/board')
-}
-
-const newGame = () => {
-  sessionStore.softReset()
   router.push('/board')
 }
 

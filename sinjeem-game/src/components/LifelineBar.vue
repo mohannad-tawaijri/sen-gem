@@ -22,9 +22,9 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
         </div>
         <div class="text-sm text-gray-500">مساعدات</div>
       </div>
-      <div class="flex flex-wrap gap-2">
+    <div class="flex flex-wrap gap-2">
         <button
-          class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
+      class="btn-secondary text-sm disabled:opacity-50"
           :disabled="props.disabled || teamA.lifelines.callUsed"
           @click="call('A')"
         >
@@ -32,7 +32,7 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
           <span v-if="teamA.lifelines.callUsed" class="ml-1 text-xs text-gray-500">(مستخدمة)</span>
         </button>
         <button
-          class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
+      class="btn-secondary text-sm disabled:opacity-50"
           :disabled="props.disabled || teamA.lifelines.twoAnswersUsed"
           @click="two('A')"
         >
@@ -51,9 +51,9 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
         </div>
         <div class="text-sm text-gray-500">مساعدات</div>
       </div>
-      <div class="flex flex-wrap gap-2">
+    <div class="flex flex-wrap gap-2">
         <button
-          class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
+      class="btn-secondary text-sm disabled:opacity-50"
           :disabled="props.disabled || teamB.lifelines.callUsed"
           @click="call('B')"
         >
@@ -61,7 +61,7 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
           <span v-if="teamB.lifelines.callUsed" class="ml-1 text-xs text-gray-500">(مستخدمة)</span>
         </button>
         <button
-          class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
+      class="btn-secondary text-sm disabled:opacity-50"
           :disabled="props.disabled || teamB.lifelines.twoAnswersUsed"
           @click="two('B')"
         >

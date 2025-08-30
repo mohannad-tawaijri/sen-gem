@@ -74,7 +74,6 @@ export interface SessionState {
     secondsLeft: number;
     total: number;
   };
-  ui?: { projector: boolean };
   status: GameStatus;
   endedAt?: string;
 }
