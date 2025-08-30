@@ -40,6 +40,15 @@ ehthumbs.db
 .env.test.local
 .env.production.local
 
+# Go server (secrets and local artifacts)
+server/.env
+server/*.db
+server/*.sqlite
+server/*.sqlite3
+server/client_secret_*.json
+server/*.key
+server/*.pem
+
 # Build outputs
 build/
 dist/
