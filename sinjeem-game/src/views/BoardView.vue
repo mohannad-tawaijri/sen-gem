@@ -120,7 +120,7 @@ function handleImageError(event: Event) {
     </header>
 
     <!-- النقاط -->
-    <LifelineBar v-if="!s.state.ui?.projector" />
+  <LifelineBar v-if="!s.state.ui?.projector" :disabled="true" />
     
     <section class="grid grid-cols-2 gap-4 mb-6">
       <div class="rounded-xl border p-4 text-center">

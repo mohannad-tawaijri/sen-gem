@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSessionStore } from '../stores/session'
 import { loadQuestions } from '../services/questions'
 import { nextTick } from 'vue'
 import type { SeedCategory } from '../types'
 import QrCode from '../components/QrCode.vue'
+import LifelineBar from '../components/LifelineBar.vue'
+import TimerOverlay from '../components/TimerOverlay.vue'
 
 const router = useRouter()
 const s = useSessionStore()
@@ -50,7 +52,8 @@ const qrUrl = computed(() => {
   return `${base}${path}${hash}`
 })
 
-const timeLeft = ref(s.state.config.questionTimeSec)
+// Timer: count up from 0 and keep running until leaving/revealing
+const elapsed = ref(0)
 const timerInterval = ref<ReturnType<typeof setInterval> | null>(null)
 
 onMounted(async () => {
@@ -67,12 +70,9 @@ onMounted(async () => {
 })
 
 function startTimer() {
+  if (timerInterval.value) clearInterval(timerInterval.value)
   timerInterval.value = setInterval(() => {
-    if (timeLeft.value > 0) {
-      timeLeft.value--
-    } else {
-      clearInterval(timerInterval.value!)
-    }
+    elapsed.value++
   }, 1000)
 }
 
@@ -106,6 +106,10 @@ function backToBoard() {
   s.state.current = undefined
   router.push({ name: 'board' })
 }
+
+onBeforeUnmount(() => {
+  if (timerInterval.value) clearInterval(timerInterval.value)
+})
 
 function handleImageError(event: Event) {
   const target = event.target as HTMLImageElement
@@ -152,11 +156,14 @@ function getImageUrl(url: string): string {
     <!-- Timer Header -->
     <header class="flex items-center justify-between mb-6">
       <div class="text-2xl font-bold" :class="s.state.ui?.projector ? 'text-3xl' : 'text-2xl'">{{ s.state.current?.difficulty }} نقطة</div>
-      <div class="text-xl" :class="[timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-gray-600', s.state.ui?.projector ? 'text-2xl' : 'text-xl']">
-        {{ Math.floor(timeLeft / 60) }}:{{ (timeLeft % 60).toString().padStart(2, '0') }}
+      <div class="text-xl" :class="['text-gray-600', s.state.ui?.projector ? 'text-2xl' : 'text-xl']">
+        {{ Math.floor(elapsed / 60) }}:{{ (elapsed % 60).toString().padStart(2, '0') }}
       </div>
       <button @click="backToBoard" class="rounded-lg border px-4 py-2" :class="s.state.ui?.projector ? 'text-lg px-6 py-3' : ''">إلغاء</button>
     </header>
+
+    <!-- Lifelines visible during the question -->
+    <LifelineBar v-if="!s.state.ui?.projector" />
 
   <!-- Question Display -->
     <section class="rounded-xl border p-8 mb-8">
@@ -195,6 +202,9 @@ function getImageUrl(url: string): string {
         عرض الإجابة
       </button>
     </section>
+
+  <!-- Overlay for lifeline timers -->
+  <TimerOverlay />
   </main>
   
   <div v-else class="flex items-center justify-center min-h-screen">

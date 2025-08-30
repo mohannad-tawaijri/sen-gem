@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useSessionStore } from '../stores/session'
 
+const props = defineProps<{ disabled?: boolean }>()
 const s = useSessionStore()
 const teamA = computed(() => s.state.teams.A)
 const teamB = computed(() => s.state.teams.B)
@@ -24,7 +25,7 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
       <div class="flex flex-wrap gap-2">
         <button
           class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
-          :disabled="teamA.lifelines.callUsed"
+          :disabled="props.disabled || teamA.lifelines.callUsed"
           @click="call('A')"
         >
           📞 اتصال بصديق
@@ -32,7 +33,7 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
         </button>
         <button
           class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
-          :disabled="teamA.lifelines.twoAnswersUsed"
+          :disabled="props.disabled || teamA.lifelines.twoAnswersUsed"
           @click="two('A')"
         >
           2️⃣ إجابتان
@@ -53,7 +54,7 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
       <div class="flex flex-wrap gap-2">
         <button
           class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
-          :disabled="teamB.lifelines.callUsed"
+          :disabled="props.disabled || teamB.lifelines.callUsed"
           @click="call('B')"
         >
           📞 اتصال بصديق
@@ -61,7 +62,7 @@ function two(t:'A'|'B'){ s.useTwoAnswers(t) }
         </button>
         <button
           class="rounded-md px-3 py-2 border text-sm disabled:opacity-50"
-          :disabled="teamB.lifelines.twoAnswersUsed"
+          :disabled="props.disabled || teamB.lifelines.twoAnswersUsed"
           @click="two('B')"
         >
           2️⃣ إجابتان
