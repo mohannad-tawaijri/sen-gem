@@ -8,6 +8,7 @@ import type { SeedCategory } from '../types'
 import QrCode from '../components/QrCode.vue'
 import LifelineBar from '../components/LifelineBar.vue'
 import TimerOverlay from '../components/TimerOverlay.vue'
+import { markSeen } from '../services/api'
 
 const router = useRouter()
 const s = useSessionStore()
@@ -67,6 +68,14 @@ onMounted(async () => {
 
   await nextTick()
   startTimer()
+
+  // Mark question as seen to update remaining count
+  try {
+    const id = s.state.current!.qid
+    await markSeen(id)
+  } catch (e) {
+    console.warn('تعذر تسجيل السؤال كمشاهد:', e)
+  }
 })
 
 function startTimer() {

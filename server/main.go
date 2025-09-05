@@ -4,32 +4,50 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
+	"regexp"
 	"server/auth"
 	"server/config"
 	"server/db"
 	"server/models"
 	"server/questions"
+	"strings"
 )
 
 func main() {
 	cfg := config.Load()
+
+	// Use release mode in production
+	if cfg.Env == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	// DB
 	gormDB, err := db.Open(cfg.DatabaseURL)
 	if err != nil {
 		log.Fatalf("db open: %v", err)
 	}
-	if err := db.AutoMigrate(gormDB, &models.User{}, &models.QuestionSeen{}); err != nil {
+	if err := db.AutoMigrate(gormDB, &models.User{}, &models.QuestionSeen{}, &models.VerificationToken{}, &models.PasswordResetToken{}); err != nil {
 		log.Fatalf("migrate: %v", err)
 	}
 
+	// Data fix: older rows may have google_id = "" which conflicts with UNIQUE.
+	// Convert empty strings to NULL so multiple local accounts are allowed.
+	if err := gormDB.Exec("UPDATE users SET google_id = NULL WHERE google_id = ''").Error; err != nil {
+		log.Printf("[warn] failed to normalize google_id empties: %v", err)
+	}
+
 	// Sessions
-	// For dev we don't set a domain and secure=false; in prod set them properly
-	sess := auth.NewSessionManager(cfg.SessionSecret, "", false)
+	// Secure cookies in production
+	secureCookies := cfg.Env == "production"
+	sess := auth.NewSessionManager(cfg.SessionSecret, "", secureCookies)
+
+	// Rate limiter: 10 req per 5m; lockout after 5 bad attempts for 15m
+	rl := auth.NewRateLimiter(5*time.Minute, 10, 5, 15*time.Minute)
 
 	r := gin.Default()
 	// Do not trust any proxies by default (explicitness avoids warnings)
@@ -41,6 +59,30 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		AllowCredentials: true,
 	}))
+
+	// Basic security headers
+	r.Use(func(c *gin.Context) {
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("Referrer-Policy", "no-referrer")
+		// minimal CSP (adjust as needed)
+		c.Header("Content-Security-Policy", "default-src 'self' 'unsafe-inline' http: https: data:")
+		c.Next()
+	})
+
+	// CSRF-ish origin check for state-changing requests (dev-friendly)
+	r.Use(func(c *gin.Context) {
+		if c.Request.Method == http.MethodGet || c.Request.Method == http.MethodHead || c.Request.Method == http.MethodOptions {
+			c.Next()
+			return
+		}
+		origin := c.Request.Header.Get("Origin")
+		if origin == "" || origin == cfg.FrontendOrigin {
+			c.Next()
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "forbidden origin"})
+	})
 
 	// Questions service
 	qsvc, qerr := questions.NewService(cfg.QuestionsDir, gormDB)
@@ -73,11 +115,52 @@ func main() {
 		})
 
 		// Local signup
-		type signupReq struct{ Email, Password, Name string }
+		type signupReq struct{ Email, Username, Password, Name string }
 		api.POST("/auth/signup", func(c *gin.Context) {
+			if ok, locked, retry := rl.Allow(c.Request, "signup"); !ok {
+				if locked {
+					c.Header("Retry-After", retry.String())
+					c.JSON(http.StatusTooManyRequests, gin.H{"error": "temporarily locked"})
+					return
+				}
+				c.Header("Retry-After", retry.String())
+				c.JSON(http.StatusTooManyRequests, gin.H{"error": "rate limited"})
+				return
+			}
 			var r signupReq
-			if err := c.BindJSON(&r); err != nil || r.Email == "" || r.Password == "" {
-				c.JSON(http.StatusBadRequest, gin.H{"error": "email and password required"})
+			if err := c.BindJSON(&r); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
+				return
+			}
+			// Enforce both email and username for signup
+			r.Email = strings.ToLower(strings.TrimSpace(r.Email))
+			r.Username = strings.TrimSpace(r.Username)
+			if r.Email == "" || r.Username == "" || r.Password == "" {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "email, username and password required"})
+				return
+			}
+			// Simple validations
+			if !strings.Contains(r.Email, "@") {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "invalid email"})
+				return
+			}
+			if ok, _ := regexp.MatchString(`^[a-zA-Z0-9_]{3,20}$`, r.Username); !ok {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "invalid username"})
+				return
+			}
+			if err := auth.ValidatePassword(r.Password); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+			// Prevent duplicates explicitly (in case DB unique index is missing)
+			var existing models.User
+			if err := gormDB.Where("email = ?", r.Email).Or("username = ?", r.Username).First(&existing).Error; err == nil {
+				// Determine which field conflicts (best-effort)
+				if existing.Email == r.Email {
+					c.JSON(http.StatusConflict, gin.H{"error": "email already exists"})
+				} else {
+					c.JSON(http.StatusConflict, gin.H{"error": "username already exists"})
+				}
 				return
 			}
 			// hash
@@ -86,9 +169,9 @@ func main() {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "hash failed"})
 				return
 			}
-			u := models.User{Email: r.Email, Name: r.Name, PasswordHash: hash}
+			u := models.User{Email: r.Email, Username: r.Username, Name: r.Name, PasswordHash: hash}
 			if err := gormDB.Create(&u).Error; err != nil {
-				c.JSON(http.StatusConflict, gin.H{"error": "email already exists"})
+				c.JSON(http.StatusConflict, gin.H{"error": "username or email already exists"})
 				return
 			}
 			sess.SetUser(c.Writer, strconv.FormatUint(uint64(u.ID), 10))
@@ -96,24 +179,137 @@ func main() {
 		})
 
 		// Local login
-		type loginReq struct{ Email, Password string }
+		type loginReq struct{ Email, Username, Password string }
 		api.POST("/auth/login", func(c *gin.Context) {
+			if ok, locked, retry := rl.Allow(c.Request, "login:"+c.ClientIP()); !ok {
+				if locked {
+					c.Header("Retry-After", retry.String())
+					c.JSON(http.StatusTooManyRequests, gin.H{"error": "temporarily locked"})
+					return
+				}
+				c.Header("Retry-After", retry.String())
+				c.JSON(http.StatusTooManyRequests, gin.H{"error": "rate limited"})
+				return
+			}
 			var r loginReq
-			if err := c.BindJSON(&r); err != nil || r.Email == "" || r.Password == "" {
-				c.JSON(http.StatusBadRequest, gin.H{"error": "email and password required"})
+			if err := c.BindJSON(&r); err != nil || (r.Email == "" && r.Username == "") || r.Password == "" {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "email or username and password required"})
 				return
 			}
 			var u models.User
-			if err := gormDB.Where("email = ?", r.Email).First(&u).Error; err != nil {
+			q := gormDB
+			if r.Email != "" {
+				q = q.Where("email = ?", r.Email)
+			} else {
+				q = q.Where("username = ?", r.Username)
+			}
+			if err := q.First(&u).Error; err != nil {
+				rl.Fail(c.Request, "login:"+r.Email)
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 				return
 			}
 			if !auth.CheckPassword(u.PasswordHash, r.Password) {
+				rl.Fail(c.Request, "login:"+r.Email)
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 				return
 			}
 			sess.SetUser(c.Writer, strconv.FormatUint(uint64(u.ID), 10))
 			c.JSON(http.StatusOK, gin.H{"user": u})
+		})
+
+		// Request email verification (dev: logs URL)
+		api.POST("/auth/verify/request", func(c *gin.Context) {
+			uidStr, ok := sess.GetUserID(c.Request)
+			if !ok {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "not authenticated"})
+				return
+			}
+			uid64, _ := strconv.ParseUint(uidStr, 10, 64)
+			token := strconv.FormatInt(time.Now().UnixNano(), 36)
+			vt := models.VerificationToken{UserID: uint(uid64), Token: token, ExpiresAt: time.Now().Add(24 * time.Hour)}
+			if err := gormDB.Create(&vt).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create token"})
+				return
+			}
+			// Log the URL (in production, email it)
+			link := "/api/auth/verify?token=" + token
+			log.Printf("[verify] open: %s", link)
+			c.Status(http.StatusNoContent)
+		})
+
+		// Verify email by token
+		api.GET("/auth/verify", func(c *gin.Context) {
+			token := c.Query("token")
+			if token == "" {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "missing token"})
+				return
+			}
+			var vt models.VerificationToken
+			if err := gormDB.Where("token = ?", token).First(&vt).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "invalid token"})
+				return
+			}
+			if time.Now().After(vt.ExpiresAt) {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "token expired"})
+				return
+			}
+			if err := gormDB.Model(&models.User{}).Where("id = ?", vt.UserID).Update("verified", true).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "update failed"})
+				return
+			}
+			_ = gormDB.Delete(&vt).Error
+			c.JSON(http.StatusOK, gin.H{"status": "verified"})
+		})
+
+		// Request password reset (dev: logs link)
+		api.POST("/auth/password/reset/request", func(c *gin.Context) {
+			var body struct{ Email string }
+			if err := c.BindJSON(&body); err != nil || body.Email == "" {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "email required"})
+				return
+			}
+			var u models.User
+			if err := gormDB.Where("email = ?", body.Email).First(&u).Error; err == nil {
+				token := strconv.FormatInt(time.Now().UnixNano(), 36)
+				rt := models.PasswordResetToken{UserID: u.ID, Token: token, ExpiresAt: time.Now().Add(1 * time.Hour)}
+				_ = gormDB.Create(&rt).Error
+				log.Printf("[reset] open: /api/auth/password/reset?token=%s", token)
+			}
+			// Always return 204 to avoid user enumeration
+			c.Status(http.StatusNoContent)
+		})
+
+		// Perform password reset
+		api.POST("/auth/password/reset", func(c *gin.Context) {
+			var body struct{ Token, NewPassword string }
+			if err := c.BindJSON(&body); err != nil || body.Token == "" || body.NewPassword == "" {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "token and newPassword required"})
+				return
+			}
+			if err := auth.ValidatePassword(body.NewPassword); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+			var rt models.PasswordResetToken
+			if err := gormDB.Where("token = ?", body.Token).First(&rt).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "invalid token"})
+				return
+			}
+			if time.Now().After(rt.ExpiresAt) {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "token expired"})
+				return
+			}
+			hash, err := auth.HashPassword(body.NewPassword)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "hash failed"})
+				return
+			}
+			if err := gormDB.Model(&models.User{}).Where("id = ?", rt.UserID).Update("password_hash", hash).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "update failed"})
+				return
+			}
+			_ = gormDB.Delete(&rt).Error
+			c.Status(http.StatusNoContent)
 		})
 
 		// Next question
@@ -147,6 +343,33 @@ func main() {
 				return
 			}
 			c.JSON(http.StatusOK, gin.H{"question": q})
+		})
+
+		// Mark a specific question as seen (id in JSON body)
+		api.POST("/questions/seen", func(c *gin.Context) {
+			if qsvc == nil {
+				c.JSON(http.StatusServiceUnavailable, gin.H{"error": "questions not loaded"})
+				return
+			}
+			uidStr, ok := sess.GetUserID(c.Request)
+			if !ok {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "not authenticated"})
+				return
+			}
+			uid64, _ := strconv.ParseUint(uidStr, 10, 64)
+			var body struct {
+				ID string `json:"id"`
+			}
+			if err := c.BindJSON(&body); err != nil || strings.TrimSpace(body.ID) == "" {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "id required"})
+				return
+			}
+			newly, err := qsvc.MarkSeenByID(uint(uid64), body.ID)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"new": newly})
 		})
 
 		// Reset
@@ -212,23 +435,14 @@ func main() {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
 			}
-			// total candidates
+			// total candidates (respect aliases/canonical mapping)
 			total := 0
 			for _, q := range qsvc.All() {
 				if f.Difficulty != 0 && q.Difficulty != f.Difficulty {
 					continue
 				}
-				if f.Category != "" {
-					has := false
-					for _, t := range q.Tags {
-						if t == f.Category {
-							has = true
-							break
-						}
-					}
-					if !has {
-						continue
-					}
+				if f.Category != "" && !questions.MatchesCategory(q.Tags, f.Category) {
+					continue
 				}
 				total++
 			}
@@ -237,12 +451,26 @@ func main() {
 	}
 
 	// OAuth routes
-	gp := auth.NewGoogleProvider(cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.OAuthRedirectURL, gormDB, sess)
+	gp := auth.NewGoogleProvider(cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.OAuthRedirectURL, gormDB, sess, cfg.FrontendOrigin)
 	if cfg.AfterLoginRedirect != "" {
 		gp.SetRedirectOK(cfg.AfterLoginRedirect)
 	}
 	r.GET("/auth/google/login", func(c *gin.Context) { gp.Login(c.Writer, c.Request) })
 	r.GET("/auth/google/callback", func(c *gin.Context) { gp.Callback(c.Writer, c.Request) })
+
+	// Optionally serve prebuilt frontend (Vite dist) when FRONTEND_DIR is set
+	if cfg.FrontendDir != "" {
+		// Serve static files under /
+		r.Static("/", cfg.FrontendDir)
+		// SPA fallback: if no API or known route matched and it's a GET -> serve index.html
+		r.NoRoute(func(c *gin.Context) {
+			if c.Request.Method != http.MethodGet {
+				c.Status(http.StatusNotFound)
+				return
+			}
+			c.File(cfg.FrontendDir + "/index.html")
+		})
+	}
 
 	log.Printf("server listening on :%s (frontend %s)", cfg.Port, cfg.FrontendOrigin)
 	if err := r.Run(":" + cfg.Port); err != nil {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // App.vue يدير التطبيق الرئيسي
+import UserBar from './components/UserBar.vue'
 </script>
 
 <template>
@@ -10,6 +11,7 @@
       <div class="absolute -bottom-32 -left-20 h-[32rem] w-[32rem] rounded-full bg-fuchsia-500/10 blur-3xl"></div>
       <div class="absolute inset-0 [background-image:radial-gradient(60rem_30rem_at_50%_-20%,rgba(99,102,241,0.08),transparent)]"></div>
     </div>
+    <UserBar />
     <router-view />
   </div>
   

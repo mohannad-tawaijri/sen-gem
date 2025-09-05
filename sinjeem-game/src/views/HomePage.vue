@@ -17,6 +17,7 @@
         <button class="btn-secondary w-full">
           ⚙️ الإعدادات
         </button>
+  <router-link :to="{ name: 'auth', query: { mode: 'login' } }" class="btn-secondary w-full inline-block text-center">👤 الحساب</router-link>
       </div>
 
       <div class="mt-8 text-sm text-gray-400">

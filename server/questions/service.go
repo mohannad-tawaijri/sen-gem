@@ -23,6 +23,55 @@ type Service struct {
 	db  *gorm.DB
 }
 
+// canonical category slugs used by the frontend
+var canonicalCategories = map[string]struct{}{
+	"flags":           {},
+	"got":             {},
+	"onepiece":        {},
+	"proverbs":        {},
+	"football":        {},
+	"premierleague":   {},
+	"general":         {},
+	"noWords":         {},
+	"pictures":        {},
+	"championsleague": {},
+}
+
+// aliases from data tag -> canonical UI slug
+var categoryAliases = map[string]string{
+	"ucl": "championsleague",
+}
+
+// map lowercase slug to canonical casing used by UI
+var canonByLower = map[string]string{
+	"flags":           "flags",
+	"got":             "got",
+	"onepiece":        "onepiece",
+	"proverbs":        "proverbs",
+	"football":        "football",
+	"premierleague":   "premierleague",
+	"general":         "general",
+	"nowords":         "noWords",
+	"pictures":        "pictures",
+	"championsleague": "championsleague",
+}
+
+func canonicalizeSlug(name string) string {
+	if v, ok := canonByLower[strings.ToLower(name)]; ok {
+		return v
+	}
+	return name
+}
+
+func sliceContains(ss []string, s string) bool {
+	for _, v := range ss {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
 func NewService(dir string, db *gorm.DB) (*Service, error) {
 	qs, err := loadFromDir(dir)
 	if err != nil {
@@ -36,6 +85,16 @@ func (s *Service) All() []Question {
 	out := make([]Question, len(s.all))
 	copy(out, s.all)
 	return out
+}
+
+// FindByID returns the question by its ID if it exists
+func (s *Service) FindByID(id string) *Question {
+	for i := range s.all {
+		if s.all[i].ID == id {
+			return &s.all[i]
+		}
+	}
+	return nil
 }
 
 func loadFromDir(dir string) ([]Question, error) {
@@ -59,6 +118,14 @@ func loadFromDir(dir string) ([]Question, error) {
 			// ignore files that are not arrays of questions
 			return nil
 		}
+		// ensure each question has the file's category slug as a tag
+		base := strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))
+		slug := canonicalizeSlug(base)
+		for i := range arr {
+			if !sliceContains(arr[i].Tags, slug) {
+				arr[i].Tags = append(arr[i].Tags, slug)
+			}
+		}
 		out = append(out, arr...)
 		return nil
 	})
@@ -77,18 +144,8 @@ func (s *Service) NextForUser(userID uint, f Filter) (*Question, error) {
 		if f.Difficulty != 0 && q.Difficulty != f.Difficulty {
 			continue
 		}
-		if f.Category != "" {
-			// check tag
-			has := false
-			for _, t := range q.Tags {
-				if t == f.Category {
-					has = true
-					break
-				}
-			}
-			if !has {
-				continue
-			}
+		if f.Category != "" && !MatchesCategory(q.Tags, f.Category) {
+			continue
 		}
 		candidates = append(candidates, q)
 	}
@@ -166,14 +223,17 @@ func (s *Service) tryMarkSeen(userID uint, q Question) (bool, error) {
 }
 
 func tagCategory(tags []string) string {
-	// prefer known categories
+	// prefer canonical categories with alias support
 	for _, t := range tags {
-		switch t {
-		case "general", "football", "got", "flags":
+		if canon, ok := categoryAliases[t]; ok {
+			return canon
+		}
+		if _, ok := canonicalCategories[t]; ok {
 			return t
 		}
 	}
 	if len(tags) > 0 {
+		// fallback to first tag
 		return tags[0]
 	}
 	return ""
@@ -188,4 +248,29 @@ func (s *Service) ResetUser(userID uint, f Filter) error {
 		q = q.Where("category = ?", f.Category)
 	}
 	return q.Delete(nil).Error
+}
+
+// MarkSeenByID marks a specific question id as seen for a user; returns true if newly marked
+func (s *Service) MarkSeenByID(userID uint, qid string) (bool, error) {
+	q := s.FindByID(qid)
+	if q == nil {
+		return false, fmt.Errorf("question not found")
+	}
+	return s.tryMarkSeen(userID, *q)
+}
+
+// MatchesCategory checks if any of the question tags match the requested category (with alias)
+func MatchesCategory(tags []string, requested string) bool {
+	req := requested
+	// normalize requested if it's an alias key (we accept canonical slugs from UI)
+	// Here aliases map is from data tag -> canonical; requested usually is canonical already
+	for _, t := range tags {
+		if t == req {
+			return true
+		}
+		if canon, ok := categoryAliases[t]; ok && canon == req {
+			return true
+		}
+	}
+	return false
 }

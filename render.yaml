@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: sen-gem
+    env: docker
+    autoDeploy: true
+    plan: starter
+    # Optional: set a region, e.g., frankfurt, oregon, singapore
+    # region: frankfurt
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: SESSION_SECRET
+        value: CHANGE_ME_TO_A_STRONG_SECRET
+      - key: FRONTEND_DIR
+        value: /app/web
+      - key: QUESTIONS_DIR
+        value: /app/questions
+      - key: DATABASE_URL
+        value: file:/data/server.db
+      - key: FRONTEND_ORIGIN
+        value: https://sen-gem.onrender.com
+      - key: AFTER_LOGIN_REDIRECT
+        value: https://sen-gem.onrender.com/#/
+      - key: OAUTH_REDIRECT_URL
+        value: https://sen-gem.onrender.com/auth/google/callback
+      - key: GOOGLE_CLIENT_ID
+        value: ""
+      - key: GOOGLE_CLIENT_SECRET
+        value: ""
