@@ -5,9 +5,13 @@ import { onMounted, ref } from 'vue'
 const secret = ref<string>('')
 
 function readHash() {
-  const h = window.location.hash
-  const params = new URLSearchParams(h.replace(/^#/, ''))
-  secret.value = params.get('s') || ''
+  // Expect hash like: #/reveal?s=...
+  const h = window.location.hash || ''
+  // Split off the path and the query in the hash
+  const qIndex = h.indexOf('?')
+  const query = qIndex >= 0 ? h.substring(qIndex + 1) : ''
+  const params = new URLSearchParams(query)
+  secret.value = decodeURIComponent(params.get('s') || '')
 }
 
 onMounted(() => {

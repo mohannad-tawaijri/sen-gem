@@ -21,13 +21,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/sengem-server .
 # 3) Runtime image
 FROM alpine:3.20
 WORKDIR /app
-ENV APP_ENV=production \
-    PORT=8080 \
-    FRONTEND_ORIGIN=http://localhost:8080 \
-    FRONTEND_DIR=/app/web \
-    DATABASE_URL=/app/server.db \
-    QUESTIONS_DIR=/app/questions \
-    SESSION_SECRET=change-me
 
 # Copy server binary and web assets
 COPY --from=server /app/sengem-server /app/sengem-server

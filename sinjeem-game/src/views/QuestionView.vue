@@ -47,10 +47,11 @@ const showQuestionMedia = computed(() => {
 const qrUrl = computed(() => {
   if (!currentEntry.value) return ''
   const secret = currentEntry.value.secret || currentEntry.value.a
-  const base = window.location.origin
-  const path = '/reveal'
-  const hash = `#s=${encodeURIComponent(secret)}`
-  return `${base}${path}${hash}`
+  // Prefer a configured public origin if provided (for cases where the host PC is localhost)
+  const publicOrigin = (import.meta as any)?.env?.VITE_PUBLIC_ORIGIN as string | undefined
+  const base = publicOrigin || window.location.origin
+  // We use Vue hash router, so route must live under #/reveal and we pass the secret as a query param
+  return `${base}/#/reveal?s=${encodeURIComponent(secret)}`
 })
 
 // Timer: count up from 0 and keep running until leaving/revealing

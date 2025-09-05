@@ -2063,22 +2063,7 @@
       "flags"
     ]
   },
-  {
-    "id": "flags-600-046",
-    "difficulty": 600,
-    "q": "ما اسم هذا العلم؟",
-    "a": "أنغولا",
-    "media": [
-      {
-        "type": "image",
-        "src": "./media/questions/flags/ao.png",
-        "alt": "علم أنغولا"
-      }
-    ],
-    "tags": [
-      "flags"
-    ]
-  },
+
   {
     "id": "flags-600-047",
     "difficulty": 600,
