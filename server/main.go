@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -460,15 +462,31 @@ func main() {
 
 	// Optionally serve prebuilt frontend (Vite dist) when FRONTEND_DIR is set
 	if cfg.FrontendDir != "" {
-		// Serve static files under /
-		r.Static("/", cfg.FrontendDir)
-		// SPA fallback: if no API or known route matched and it's a GET -> serve index.html
+		// SPA serving without registering a wildcard route (avoid conflicts with /api, /auth)
 		r.NoRoute(func(c *gin.Context) {
 			if c.Request.Method != http.MethodGet {
 				c.Status(http.StatusNotFound)
 				return
 			}
-			c.File(cfg.FrontendDir + "/index.html")
+			// Try to serve an existing static file from FRONTEND_DIR
+			reqPath := c.Request.URL.Path
+			if reqPath == "/" || reqPath == "" {
+				c.File(filepath.Join(cfg.FrontendDir, "index.html"))
+				return
+			}
+			// Clean and join path
+			clean := filepath.Clean(reqPath)
+			// prevent path traversal
+			if len(clean) > 0 && clean[0] == '/' {
+				clean = clean[1:]
+			}
+			fsPath := filepath.Join(cfg.FrontendDir, clean)
+			if info, err := os.Stat(fsPath); err == nil && !info.IsDir() {
+				c.File(fsPath)
+				return
+			}
+			// Fallback to index.html for SPA routes
+			c.File(filepath.Join(cfg.FrontendDir, "index.html"))
 		})
 	}
 
