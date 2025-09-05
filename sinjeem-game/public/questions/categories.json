@@ -8,5 +8,5 @@
   { "slug": "general",      "name": "معلومات عامة",      "image": "/media/categories/general.png" },
   { "slug": "noWords",      "name": "ولا كلمة",          "image": "/media/categories/noWords.jfif" },
   { "slug": "pictures",     "name": "تحدي الصور",        "image": "/media/categories/pictures.jfif" },
-  { "slug": "championsleague", "name": "دوري أبطال أوروبا", "image": "/media/categories/football.png" }
+  { "slug": "championsleague", "name": "دوري أبطال أوروبا", "image": "/media/categories/champions_league.png" }
 ]
