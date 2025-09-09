@@ -82,7 +82,7 @@ onMounted(async () => {
 function startTimer() {
   if (timerInterval.value) clearInterval(timerInterval.value)
   timerInterval.value = setInterval(() => {
-    elapsed.value++
+  if (!s.paused) elapsed.value++
   }, 1000)
 }
 
@@ -166,10 +166,16 @@ function getImageUrl(url: string): string {
     <!-- Timer Header -->
     <header class="flex items-center justify-between mb-6">
       <div class="heading text-2xl">{{ s.state.current?.difficulty }} نقطة</div>
-      <div class="text-xl font-mono px-3 py-1 rounded-lg glass">
-        {{ Math.floor(elapsed / 60) }}:{{ (elapsed % 60).toString().padStart(2, '0') }}
+      <div class="text-xl font-mono px-3 py-1 rounded-lg glass flex items-center gap-2">
+        <span>{{ Math.floor(elapsed / 60) }}:{{ (elapsed % 60).toString().padStart(2, '0') }}</span>
+        <span class="text-xs opacity-70" v-if="s.paused">(متوقف)</span>
       </div>
-      <button @click="backToBoard" class="btn-secondary">إلغاء</button>
+      <div class="flex items-center gap-2">
+        <button @click="s.paused ? s.resumeTimer() : s.pauseTimer()" class="btn-secondary">
+          {{ s.paused ? 'استئناف' : 'إيقاف مؤقت' }}
+        </button>
+        <button @click="backToBoard" class="btn-secondary">إلغاء</button>
+      </div>
     </header>
 
     <!-- Lifelines visible during the question -->

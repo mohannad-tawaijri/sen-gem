@@ -6,6 +6,7 @@ import { loadQuestions } from '../services/questions'
 import type { SeedCategory, Points } from '../types'
 import LifelineBar from '../components/LifelineBar.vue'
 import TimerOverlay from '../components/TimerOverlay.vue'
+import RouletteModal from '../components/RouletteModal.vue'
 
 const router = useRouter()
 const s = useSessionStore()
@@ -96,13 +97,21 @@ function handleImageError(event: Event) {
     target.style.display = 'none'
   }
 }
+
+const rouletteOpen = ref(false)
+function openRoulette() { rouletteOpen.value = true }
+function closeRoulette() { rouletteOpen.value = false }
 </script>
 
 <template>
   <main class="max-w-[1200px] mx-auto p-6">
     <header class="flex items-center justify-between mb-6">
       <h1 class="heading text-3xl">لوحة الأسئلة</h1>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3">
+        <div class="px-3 py-1 rounded-lg glass text-sm">
+          الدور الحالي: <span class="font-bold">{{ s.state.currentTurn === 'A' ? s.state.teams.A.name : s.state.teams.B.name }}</span>
+        </div>
+        <button class="btn-secondary" @click="openRoulette">عجلة الحظ</button>
         <button class="btn-danger" @click="endGame">إنهاء اللعبة</button>
         <button class="btn-secondary" @click="backToSetup()">رجوع للإعداد</button>
       </div>
@@ -176,5 +185,6 @@ function handleImageError(event: Event) {
     </section>
 
     <TimerOverlay />
+  <RouletteModal :open="rouletteOpen" :team="s.state.currentTurn || 'A'" @close="closeRoulette" />
   </main>
 </template>

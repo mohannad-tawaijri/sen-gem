@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Points, TeamId, SessionState, SelectedForBoard, MediaItem } from '../types'
+import type { Points, TeamId, SessionState, SelectedForBoard, MediaItem, RouletteOutcome } from '../types'
 import { loadQuestions } from '../services/questions'
 import { previewQuestions } from '../services/api'
 
@@ -27,6 +27,8 @@ export const useSessionStore = defineStore('session', () => {
     selectedForBoard: undefined,
     usedIds: {},
     current: undefined,
+  currentTurn: 'A',
+  currentDouble: false,
   lifelineOverlay: { active: false, team: 'A', kind: 'call', secondsLeft: 0, total: 0 },
     status: 'active',
     endedAt: undefined
@@ -83,6 +85,8 @@ export const useSessionStore = defineStore('session', () => {
     state.value.usedIds = {}
     state.value.current = undefined
     state.value.selectedForBoard = undefined
+  state.value.currentTurn = 'A'
+  state.value.currentDouble = false
     saveState()
   }
 
@@ -102,6 +106,8 @@ export const useSessionStore = defineStore('session', () => {
       selectedForBoard: undefined,
       usedIds: {},
       current: undefined,
+  currentTurn: 'A',
+  currentDouble: false,
   lifelineOverlay: { active: false, team: 'A', kind: 'call', secondsLeft: 0, total: 0 },
       status: 'active',
       endedAt: undefined
@@ -193,7 +199,9 @@ export const useSessionStore = defineStore('session', () => {
     }
     
     console.log(`✅ فتح سؤال: ${qid} من ${slug}, ${difficulty}, index ${safeIndex}`)
-    state.value.current = { slug, difficulty, index: safeIndex, showing: 'question', qid }
+  state.value.current = { slug, difficulty, index: safeIndex, showing: 'question', qid }
+  // عند فتح سؤال جديد، إلغاء الدبل السابق
+  state.value.currentDouble = false
     saveState()
   }
 
@@ -205,11 +213,17 @@ export const useSessionStore = defineStore('session', () => {
 
   const award = (to?: TeamId) => {
     if (!state.value.current) return
-    if (to) state.value.teams[to].score += state.value.current.difficulty
+    if (to) {
+      const base = state.value.current.difficulty
+      const pts = state.value.currentDouble ? base * 2 : base
+      state.value.teams[to].score += pts
+    }
     // علّم السؤال كمستخدم
     state.value.usedIds![state.value.current.qid] = true
     currentAnswer.value = null
     state.value.current = undefined
+    // تبديل الدور إلى الفريق الآخر بعد إنهاء السؤال
+    state.value.currentTurn = state.value.currentTurn === 'A' ? 'B' : 'A'
     saveState()
   }
 
@@ -255,17 +269,48 @@ export const useSessionStore = defineStore('session', () => {
     saveState();
   }
 
+  // إيقاف/استئناف مؤقت (لشاشة السؤال التي تعدّ داخليًا)
+  const paused = ref(false)
+  function pauseTimer() { paused.value = true; saveState() }
+  function resumeTimer() { paused.value = false; saveState() }
+
+  // روليّت: تنفيذ نتيجة
+  function applyRoulette(outcome: RouletteOutcome, actingTeam: TeamId) {
+    if (!state.value.current) return
+    const base = state.value.current.difficulty
+    const other: TeamId = actingTeam === 'A' ? 'B' : 'A'
+    switch (outcome) {
+      case 'gain':
+        state.value.teams[actingTeam].score += base
+        break
+      case 'lose':
+        state.value.teams[actingTeam].score -= base
+        break
+      case 'opponentLose':
+        state.value.teams[other].score -= base
+        break
+      case 'double':
+        state.value.currentDouble = true
+        break
+    }
+    saveState()
+  }
+
   
 
   // تحميل الحالة عند إنشاء المخزن
   loadState()
 
   return {
-    state, setTeamName, setScore, addScore, setConfig,
+  state, setTeamName, setScore, addScore, setConfig,
     setSelectedSlugs, softReset, hardReset,
     initBoardPicks, openCell, revealAnswer, award, cellUsed,
-    currentAnswer,
+  currentAnswer,
     canUseLifeline, useTwoAnswers, startCallAFriend, tickOverlay, closeOverlay,
-    endGame, resumeGame
+  endGame, resumeGame,
+  // timer controls
+  paused, pauseTimer, resumeTimer,
+  // roulette
+  applyRoulette
   }
 })

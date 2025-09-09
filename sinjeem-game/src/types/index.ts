@@ -2,6 +2,7 @@ export type Points = 200 | 400 | 600;
 export type TeamId = 'A' | 'B';
 export type LifelineKind = 'call' | 'twoAnswers';
 export type GameStatus = 'active' | 'ended';
+export type RouletteOutcome = 'gain' | 'lose' | 'opponentLose' | 'double';
 
 export interface MediaItem {
   type: 'image';
@@ -67,6 +68,8 @@ export interface SessionState {
   selectedForBoard?: SelectedForBoard;
   usedIds?: Record<string, boolean>;
   current?: CurrentPtr;
+  currentTurn?: TeamId;        // الفريق صاحب الدور الحالي
+  currentDouble?: boolean;     // هل السؤال الحالي مضاعف؟
   lifelineOverlay?: {
     active: boolean;
     team: TeamId;
