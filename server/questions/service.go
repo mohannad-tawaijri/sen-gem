@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"gorm.io/gorm"
@@ -19,8 +20,9 @@ type Question struct {
 }
 
 type Service struct {
-	all []Question
-	db  *gorm.DB
+	all       []Question
+	db        *gorm.DB
+	idAliases map[string]string
 }
 
 // canonical category slugs used by the frontend
@@ -75,11 +77,28 @@ func sliceContains(ss []string, s string) bool {
 }
 
 func NewService(dir string, db *gorm.DB) (*Service, error) {
-	qs, err := loadFromDir(dir)
+	qs, aliases, err := loadFromDir(dir)
 	if err != nil {
 		return nil, err
 	}
-	return &Service{all: qs, db: db}, nil
+	// merge aliases from optional id_aliases.json produced by data normalization
+	aliasFile := filepath.Join(dir, "id_aliases.json")
+	if b, err := os.ReadFile(aliasFile); err == nil {
+		// Strip BOM
+		if len(b) >= 3 && b[0] == 0xEF && b[1] == 0xBB && b[2] == 0xBF {
+			b = b[3:]
+		}
+		m := map[string]string{}
+		if json.Unmarshal(b, &m) == nil {
+			if aliases == nil {
+				aliases = make(map[string]string)
+			}
+			for k, v := range m {
+				aliases[k] = v
+			}
+		}
+	}
+	return &Service{all: qs, db: db, idAliases: aliases}, nil
 }
 
 // All returns the loaded questions list (read-only copy)
@@ -91,6 +110,11 @@ func (s *Service) All() []Question {
 
 // FindByID returns the question by its ID if it exists
 func (s *Service) FindByID(id string) *Question {
+	if s != nil && s.idAliases != nil {
+		if can, ok := s.idAliases[id]; ok {
+			id = can
+		}
+	}
 	for i := range s.all {
 		if s.all[i].ID == id {
 			return &s.all[i]
@@ -99,8 +123,55 @@ func (s *Service) FindByID(id string) *Question {
 	return nil
 }
 
-func loadFromDir(dir string) ([]Question, error) {
+func loadFromDir(dir string) ([]Question, map[string]string, error) {
 	var out []Question
+	aliases := make(map[string]string)
+
+	used := make(map[string]map[int]map[int]struct{}) // slug->diff->serial
+	nextSerial := make(map[string]map[int]int)        // slug->diff->next
+	ensureMaps := func(slug string, diff int) {
+		if _, ok := used[slug]; !ok {
+			used[slug] = make(map[int]map[int]struct{})
+		}
+		if _, ok := used[slug][diff]; !ok {
+			used[slug][diff] = make(map[int]struct{})
+		}
+		if _, ok := nextSerial[slug]; !ok {
+			nextSerial[slug] = make(map[int]int)
+		}
+		if _, ok := nextSerial[slug][diff]; !ok {
+			nextSerial[slug][diff] = 1
+		}
+	}
+	normalizeID := func(orig string, slug string, diff int) string {
+		ensureMaps(slug, diff)
+		serial := 0
+		parts := strings.Split(orig, "-")
+		if len(parts) >= 3 {
+			if n, err := strconv.Atoi(parts[len(parts)-1]); err == nil {
+				serial = n
+			}
+		}
+		if serial <= 0 {
+			serial = nextSerial[slug][diff]
+		}
+		for {
+			if _, exists := used[slug][diff][serial]; !exists {
+				break
+			}
+			serial++
+		}
+		used[slug][diff][serial] = struct{}{}
+		if serial >= nextSerial[slug][diff] {
+			nextSerial[slug][diff] = serial + 1
+		}
+		canonical := fmt.Sprintf("%s-%d-%03d", slug, diff, serial)
+		if canonical != orig {
+			aliases[orig] = canonical
+		}
+		return canonical
+	}
+
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -136,12 +207,14 @@ func loadFromDir(dir string) ([]Question, error) {
 			if !sliceContains(arr[i].Tags, slug) {
 				arr[i].Tags = append(arr[i].Tags, slug)
 			}
+			// normalize ID to <slug>-<difficulty>-NNN
+			arr[i].ID = normalizeID(arr[i].ID, slug, arr[i].Difficulty)
 			filtered = append(filtered, arr[i])
 		}
 		out = append(out, filtered...)
 		return nil
 	})
-	return out, err
+	return out, aliases, err
 }
 
 type Filter struct {
@@ -209,6 +282,19 @@ func (s *Service) tryMarkSeen(userID uint, q Question) (bool, error) {
 		var count int64
 		if err := tx.Table("question_seens").Where("user_id = ? AND question_id = ?", userID, q.ID).Count(&count).Error; err != nil {
 			return err
+		}
+		// also check legacy aliases
+		if count == 0 && s.idAliases != nil {
+			for legacy, can := range s.idAliases {
+				if can == q.ID {
+					if err := tx.Table("question_seens").Where("user_id = ? AND question_id = ?", userID, legacy).Count(&count).Error; err != nil {
+						return err
+					}
+					if count > 0 {
+						break
+					}
+				}
+			}
 		}
 		if count > 0 {
 			return fmt.Errorf("seen")
@@ -288,7 +374,13 @@ func (s *Service) getSeenSet(userID uint, f Filter) (map[string]struct{}, error)
 	}
 	m := make(map[string]struct{}, len(rows))
 	for _, r := range rows {
-		m[r.QuestionID] = struct{}{}
+		id := r.QuestionID
+		m[id] = struct{}{}
+		if s.idAliases != nil {
+			if can, ok := s.idAliases[id]; ok {
+				m[can] = struct{}{}
+			}
+		}
 	}
 	return m, nil
 }
@@ -323,6 +415,11 @@ func (s *Service) ResetUser(userID uint, f Filter) error {
 
 // MarkSeenByID marks a specific question id as seen for a user; returns true if newly marked
 func (s *Service) MarkSeenByID(userID uint, qid string) (bool, error) {
+	if s != nil && s.idAliases != nil {
+		if can, ok := s.idAliases[qid]; ok {
+			qid = can
+		}
+	}
 	q := s.FindByID(qid)
 	if q == nil {
 		return false, fmt.Errorf("question not found")
