@@ -27,13 +27,14 @@ async function doLogin() {
     <div class="flex items-center gap-2 text-sm">
       <button class="text-gray-300 hover:underline" @click="$router.back()">رجوع</button>
     </div>
-    <h1 class="text-2xl font-bold">تسجيل الدخول</h1>
-  <button class="w-full rounded-xl px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold" @click="googleLogin((route.query.next as string) || '/')">Google</button>
+  <h1 class="text-2xl font-bold">تسجيل الدخول</h1>
     <div class="rounded-2xl border border-white/10 bg-slate-900/50 p-5 space-y-2">
       <input v-model="identifier" placeholder="الإيميل أو اسم المستخدم" class="w-full rounded-xl bg-slate-900/60 px-4 py-2" />
       <input v-model="password" type="password" placeholder="كلمة المرور" class="w-full rounded-xl bg-slate-900/60 px-4 py-2" />
-      <button class="w-full rounded-xl px-4 py-2 bg-slate-800/60 hover:bg-slate-700/60 border border-white/10" @click="doLogin">دخول</button>
-      <div class="text-xs text-gray-400">جديد؟ <router-link class="text-indigo-400" :to="{ name: 'signup', query: route.query }">إنشاء حساب</router-link></div>
+  <button class="w-full rounded-xl px-4 py-2 bg-slate-800/60 hover:bg-slate-700/60 border border-white/10" @click="doLogin">تسجيل دخول</button>
+  <div class="text-xs text-gray-400 text-center">أو</div>
+  <button class="w-full rounded-xl px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold" @click="googleLogin((route.query.next as string) || '/')">متابعة باستخدام Google</button>
+  <div class="text-xs text-gray-400">جديد؟ <router-link class="text-indigo-400" :to="{ name: 'signup', query: route.query }">إنشاء حساب</router-link></div>
       <div class="text-red-400 text-sm" v-if="error">{{ error }}</div>
     </div>
   </div>
