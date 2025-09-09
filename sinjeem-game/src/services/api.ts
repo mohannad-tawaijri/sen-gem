@@ -68,6 +68,16 @@ export async function stats(params: { category?: string; difficulty?: number } =
   return res.json()
 }
 
+export async function previewQuestions(params: { category?: string; difficulty?: number; limit?: number } = {}) {
+  const url = new URL('/api/questions/preview', window.location.origin)
+  if (params.category) url.searchParams.set('category', params.category)
+  if (params.difficulty) url.searchParams.set('difficulty', String(params.difficulty))
+  if (params.limit) url.searchParams.set('limit', String(params.limit))
+  const res = await fetch(url.toString(), { credentials: 'include' })
+  if (!res.ok) throw new Error('preview failed')
+  return res.json()
+}
+
 export async function resetSeen(params: { category?: string; difficulty?: number } = {}) {
   const url = new URL('/api/questions/reset', window.location.origin)
   if (params.category) url.searchParams.set('category', params.category)

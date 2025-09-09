@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Points, TeamId, SessionState, SelectedForBoard, MediaItem } from '../types'
 import { loadQuestions } from '../services/questions'
-import { nextQuestion } from '../services/api'
+import { previewQuestions } from '../services/api'
 
 interface AnswerState {
   question: string
@@ -135,19 +135,13 @@ export const useSessionStore = defineStore('session', () => {
         continue
       }
       
-      async function pickN(diff: Points, n = 2) {
+    async function pickN(diff: Points, n = 2) {
         const result: string[] = []
         // حاول جلب أسئلة غير مشاهدة من الخادم (لمنع التكرار للمستخدم المسجّل)
         try {
-          for (let i = 0; i < n; i++) {
-            const res = await nextQuestion({ category: slug, difficulty: diff })
-            const id = res?.question?.id as string | undefined
-            if (id && !result.includes(id)) {
-              result.push(id)
-            } else {
-              break
-            }
-          }
+      const res = await previewQuestions({ category: slug, difficulty: diff, limit: n })
+      const ids = (res?.questions || []).map((q: any) => q.id as string)
+      ids.forEach((id: string) => { if (id && !result.includes(id)) result.push(id) })
         } catch (e) {
           console.warn('nextQuestion فشل أو غير متاح، سيتم استخدام اختيار محلي:', e)
         }

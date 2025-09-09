@@ -115,6 +115,10 @@ func loadFromDir(dir string) ([]Question, error) {
 		if err != nil {
 			return err
 		}
+		// Strip UTF-8 BOM if present
+		if len(b) >= 3 && b[0] == 0xEF && b[1] == 0xBB && b[2] == 0xBF {
+			b = b[3:]
+		}
 		var arr []Question
 		if err := json.Unmarshal(b, &arr); err != nil {
 			// ignore files that are not arrays of questions
@@ -123,12 +127,18 @@ func loadFromDir(dir string) ([]Question, error) {
 		// ensure each question has the file's category slug as a tag
 		base := strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))
 		slug := canonicalizeSlug(base)
+		filtered := make([]Question, 0, len(arr))
 		for i := range arr {
+			// ignore malformed entries (e.g., categories.json etc.)
+			if strings.TrimSpace(arr[i].ID) == "" || arr[i].Difficulty == 0 {
+				continue
+			}
 			if !sliceContains(arr[i].Tags, slug) {
 				arr[i].Tags = append(arr[i].Tags, slug)
 			}
+			filtered = append(filtered, arr[i])
 		}
-		out = append(out, arr...)
+		out = append(out, filtered...)
 		return nil
 	})
 	return out, err
@@ -222,6 +232,65 @@ func (s *Service) tryMarkSeen(userID uint, q Question) (bool, error) {
 		return false, returnErr
 	}
 	return true, nil
+}
+
+// PreviewForUser returns up to 'limit' candidate questions for a user without marking them seen
+func (s *Service) PreviewForUser(userID uint, f Filter, limit int) ([]Question, error) {
+	// build candidate set
+	candidates := make([]Question, 0, len(s.all))
+	for _, q := range s.all {
+		if f.Difficulty != 0 && q.Difficulty != f.Difficulty {
+			continue
+		}
+		if f.Category != "" && !MatchesCategory(q.Tags, f.Category) {
+			continue
+		}
+		candidates = append(candidates, q)
+	}
+	if len(candidates) == 0 || limit <= 0 {
+		return []Question{}, nil
+	}
+	// fetch seen IDs for user under filter
+	seenSet, err := s.getSeenSet(userID, f)
+	if err != nil {
+		return nil, err
+	}
+	pool := make([]Question, 0, len(candidates))
+	for _, q := range candidates {
+		if _, ok := seenSet[q.ID]; !ok {
+			pool = append(pool, q)
+		}
+	}
+	if len(pool) == 0 {
+		return []Question{}, nil
+	}
+	// shuffle and take up to limit
+	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	if limit > len(pool) {
+		limit = len(pool)
+	}
+	out := make([]Question, limit)
+	copy(out, pool[:limit])
+	return out, nil
+}
+
+func (s *Service) getSeenSet(userID uint, f Filter) (map[string]struct{}, error) {
+	rows := []struct{ QuestionID string }{}
+	q := s.db.Table("question_seens").Select("question_id").Where("user_id = ?", userID)
+	if f.Difficulty != 0 {
+		q = q.Where("difficulty = ?", f.Difficulty)
+	}
+	if f.Category != "" {
+		q = q.Where("category = ?", f.Category)
+	}
+	if err := q.Find(&rows).Error; err != nil {
+		return nil, err
+	}
+	m := make(map[string]struct{}, len(rows))
+	for _, r := range rows {
+		m[r.QuestionID] = struct{}{}
+	}
+	return m, nil
 }
 
 func tagCategory(tags []string) string {

@@ -347,6 +347,41 @@ func main() {
 			c.JSON(http.StatusOK, gin.H{"question": q})
 		})
 
+		// Preview questions (does not mark seen)
+		api.GET("/questions/preview", func(c *gin.Context) {
+			if qsvc == nil {
+				c.JSON(http.StatusServiceUnavailable, gin.H{"error": "questions not loaded"})
+				return
+			}
+			uidStr, ok := sess.GetUserID(c.Request)
+			if !ok {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "not authenticated"})
+				return
+			}
+			uid64, _ := strconv.ParseUint(uidStr, 10, 64)
+			var f questions.Filter
+			if v := c.Query("category"); v != "" {
+				f.Category = v
+			}
+			if v := c.Query("difficulty"); v != "" {
+				if d, err := strconv.Atoi(v); err == nil {
+					f.Difficulty = d
+				}
+			}
+			limit := 2
+			if v := c.Query("limit"); v != "" {
+				if d, err := strconv.Atoi(v); err == nil && d > 0 {
+					limit = d
+				}
+			}
+			qs, err := qsvc.PreviewForUser(uint(uid64), f, limit)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"questions": qs})
+		})
+
 		// Mark a specific question as seen (id in JSON body)
 		api.POST("/questions/seen", func(c *gin.Context) {
 			if qsvc == nil {
