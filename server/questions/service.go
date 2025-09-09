@@ -179,25 +179,25 @@ func loadFromDir(dir string) ([]Question, map[string]string, error) {
 		if info.IsDir() {
 			return nil
 		}
-	    if !strings.HasSuffix(info.Name(), ".json") {
-		    return nil
-	    }
-	    // Only load files that correspond to known category slugs (or their aliases)
-	    // This avoids accidentally ingesting helper files like *_no_answers.json
-	    base := strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))
-	    slugCheck := canonicalizeSlug(base)
-	    allowed := false
-	    if _, ok := canonicalCategories[slugCheck]; ok {
-		    // allow exact canonical file, or alias file that maps to this canonical
-		    if base == slugCheck {
-			    allowed = true
-		    } else if canon, ok := categoryAliases[base]; ok && canon == slugCheck {
-			    allowed = true
-		    }
-	    }
-	    if !allowed {
-		    return nil
-	    }
+		if !strings.HasSuffix(info.Name(), ".json") {
+			return nil
+		}
+		// Only load files that correspond to known category slugs (or their aliases)
+		// This avoids accidentally ingesting helper files like *_no_answers.json
+		base := strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))
+		slugCheck := canonicalizeSlug(base)
+		allowed := false
+		if _, ok := canonicalCategories[slugCheck]; ok {
+			// allow exact canonical file, or alias file that maps to this canonical
+			if base == slugCheck {
+				allowed = true
+			} else if canon, ok := categoryAliases[base]; ok && canon == slugCheck {
+				allowed = true
+			}
+		}
+		if !allowed {
+			return nil
+		}
 		b, err := os.ReadFile(path)
 		if err != nil {
 			return err
@@ -211,9 +211,9 @@ func loadFromDir(dir string) ([]Question, map[string]string, error) {
 			// ignore files that are not arrays of questions
 			return nil
 		}
-	// ensure each question has the file's category slug as a tag
-	// base and slug were computed earlier for allowed files
-	slug := slugCheck
+		// ensure each question has the file's category slug as a tag
+		// base and slug were computed earlier for allowed files
+		slug := slugCheck
 		filtered := make([]Question, 0, len(arr))
 		for i := range arr {
 			// ignore malformed entries (e.g., categories.json etc.)
