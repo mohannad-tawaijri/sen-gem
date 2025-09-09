@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Points, TeamId, SessionState, SelectedForBoard, MediaItem } from '../types'
 import { loadQuestions } from '../services/questions'
+import { nextQuestion } from '../services/api'
 
 interface AnswerState {
   question: string
@@ -134,25 +135,41 @@ export const useSessionStore = defineStore('session', () => {
         continue
       }
       
-      function pickN(diff: Points, n = 2) {
+      async function pickN(diff: Points, n = 2) {
+        const result: string[] = []
+        // حاول جلب أسئلة غير مشاهدة من الخادم (لمنع التكرار للمستخدم المسجّل)
+        try {
+          for (let i = 0; i < n; i++) {
+            const res = await nextQuestion({ category: slug, difficulty: diff })
+            const id = res?.question?.id as string | undefined
+            if (id && !result.includes(id)) {
+              result.push(id)
+            } else {
+              break
+            }
+          }
+        } catch (e) {
+          console.warn('nextQuestion فشل أو غير متاح، سيتم استخدام اختيار محلي:', e)
+        }
+
+        // اكمل بالاختيار المحلي عند الحاجة
         const arr = (cat?.entries || []).filter(e => e.difficulty === diff).map(e => e.id)
         console.log(`🔍 فئة ${slug} - مستوى ${diff}: عثر على ${arr.length} أسئلة`, arr)
-        
-        // خلط الأسئلة المتوفرة
-        shuffleArray(arr)
-        
-        // اختيار العدد المطلوب، أو ما هو متوفر إذا كان أقل
-        const result = arr.slice(0, Math.min(n, arr.length))
-        
-        // إذا لم يكن هناك أسئلة كافية، كرر الموجود (للتوافق)
+        const pool = arr.filter(id => !result.includes(id))
+        shuffleArray(pool)
+        while (result.length < n && pool.length) {
+          const id = pool.pop()!
+          result.push(id)
+        }
+        // إذا ما زال ناقصًا، اسمح بالتكرار داخل اللوح مثل السابق
         while (result.length < n && arr.length > 0) {
           result.push(arr[Math.floor(Math.random() * arr.length)])
         }
-        
+
         console.log(`✅ فئة ${slug} - مستوى ${diff}: اختار ${result.length} أسئلة`, result)
         return result
       }
-  picks[slug] = { "200": pickN(200), "400": pickN(400), "600": pickN(600) }
+      picks[slug] = { "200": await pickN(200), "400": await pickN(400), "600": await pickN(600) }
     }
     console.log('🎯 selectedForBoard:', picks)
     state.value.selectedForBoard = picks

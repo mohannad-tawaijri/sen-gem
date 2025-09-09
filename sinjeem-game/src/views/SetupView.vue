@@ -48,6 +48,7 @@
               :categories="categories" 
               v-model="selectedCategories" 
               :limit="6"
+              :disabled-slugs="disabledSlugs"
             />
           </div>
 
@@ -83,6 +84,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import CategoryPicker from '../components/CategoryPicker.vue'
 import { loadQuestions } from '../services/questions'
+import { stats } from '../services/api'
 import { useSessionStore } from '../stores/session'
 import type { SeedCategory } from '../types'
 
@@ -91,6 +93,7 @@ const sessionStore = useSessionStore()
 const categories = ref<SeedCategory[]>([])
 const loading = ref(true)
 const error = ref('')
+const disabledSlugs = ref<string[]>([])
 
 const selectedCategories = computed({
   get: () => sessionStore.state.selectedCategorySlugs,
@@ -112,6 +115,25 @@ const loadCategoriesData = async () => {
     loading.value = true
     error.value = ''
     categories.value = await loadQuestions()
+    // احسب الفئات المقفلة: إذا أي مستوى لا يحتوي أسئلة جديدة للمستخدم
+    const locked: string[] = []
+    for (const cat of categories.value) {
+      try {
+        const r200 = await stats({ category: cat.slug, difficulty: 200 })
+        const r400 = await stats({ category: cat.slug, difficulty: 400 })
+        const r600 = await stats({ category: cat.slug, difficulty: 600 })
+        const rem200 = (r200?.remaining ?? (r200?.total - r200?.seen)) || 0
+        const rem400 = (r400?.remaining ?? (r400?.total - r400?.seen)) || 0
+        const rem600 = (r600?.remaining ?? (r600?.total - r600?.seen)) || 0
+        if (rem200 === 0 || rem400 === 0 || rem600 === 0) {
+          locked.push(cat.slug)
+        }
+      } catch (e) {
+        // إذا غير مسجل دخول/الـ API فشل، لا نقفل شيء
+        console.warn('stats failed for', cat.slug, e)
+      }
+    }
+    disabledSlugs.value = locked
   } catch (err: any) {
     error.value = err.message || 'حدث خطأ في تحميل البيانات'
   } finally {

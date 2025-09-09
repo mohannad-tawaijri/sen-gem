@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import type { SeedCategory } from '../types'
 
-const props = defineProps<{ categories: SeedCategory[]; modelValue: string[]; limit?: number }>()
+const props = defineProps<{ categories: SeedCategory[]; modelValue: string[]; limit?: number; disabledSlugs?: string[] }>()
 const emit = defineEmits<{ 'update:modelValue': [string[]] }>()
 
 const limit = computed(() => props.limit ?? 6)
@@ -12,6 +12,8 @@ const selected = computed({
 })
 
 function toggle(slug: string) {
+  // لا تسمح بالنقر على الفئات المقفلة
+  if (props.disabledSlugs?.includes(slug)) return
   const set = new Set(selected.value)
   if (set.has(slug)) set.delete(slug)
   else {
@@ -21,6 +23,7 @@ function toggle(slug: string) {
   selected.value = Array.from(set)
 }
 const isOn = (slug: string) => selected.value.includes(slug)
+const isDisabled = (slug: string) => !!props.disabledSlugs?.includes(slug)
 </script>
 
 <template>
@@ -32,8 +35,11 @@ const isOn = (slug: string) => selected.value.includes(slug)
       <button
         v-for="cat in categories" :key="cat.slug" type="button"
         class="group rounded-xl border overflow-hidden text-left transition
-               data-[on=true]:ring-2 data-[on=true]:ring-blue-600"
+               data-[on=true]:ring-2 data-[on=true]:ring-blue-600 relative"
         :data-on="isOn(cat.slug)" @click="toggle(cat.slug)"
+        :disabled="isDisabled(cat.slug)"
+        :aria-disabled="isDisabled(cat.slug)"
+        :class="{ 'opacity-50 pointer-events-none': isDisabled(cat.slug) }"
       >
         <div class="aspect-[1/1] bg-gray-100 overflow-hidden">
           <img v-if="cat.image" :src="cat.image" :alt="cat.name"
@@ -41,6 +47,9 @@ const isOn = (slug: string) => selected.value.includes(slug)
           <div v-else class="flex h-full items-center justify-center text-gray-400">لا صورة</div>
         </div>
         <div class="p-2 text-sm font-medium text-center">{{ cat.name }}</div>
+        <div v-if="isDisabled(cat.slug)" class="absolute inset-0 bg-black/30 grid place-items-center">
+          <span class="px-2 py-1 text-xs rounded-md bg-gray-900/70 text-white border border-white/10">مقفلة (لا أسئلة جديدة)</span>
+        </div>
       </button>
     </div>
   </div>
