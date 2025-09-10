@@ -39,7 +39,7 @@ export interface QuestionsFile {
 export interface TeamState {
   name: string;
   score: number;
-  lifelines: { callUsed: boolean; twoAnswersUsed: boolean };
+  lifelines: { callUsed: boolean; twoAnswersUsed: boolean; rouletteUsed: boolean };
 }
 
 export interface Config {

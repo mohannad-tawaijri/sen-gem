@@ -20,8 +20,8 @@ export const useSessionStore = defineStore('session', () => {
       callAFriendSec: 60
     },
     teams: {
-      A: { name: 'الفريق الأول', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false } },
-      B: { name: 'الفريق الثاني', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false } }
+  A: { name: 'الفريق الأول', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false, rouletteUsed: false } },
+  B: { name: 'الفريق الثاني', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false, rouletteUsed: false } }
     },
     selectedCategorySlugs: [],
     selectedForBoard: undefined,
@@ -99,8 +99,8 @@ export const useSessionStore = defineStore('session', () => {
         callAFriendSec: 60
       },
       teams: {
-        A: { name: 'الفريق الأول', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false } },
-        B: { name: 'الفريق الثاني', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false } }
+  A: { name: 'الفريق الأول', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false, rouletteUsed: false } },
+  B: { name: 'الفريق الثاني', score: 0, lifelines: { callUsed: false, twoAnswersUsed: false, rouletteUsed: false } }
       },
       selectedCategorySlugs: [],
       selectedForBoard: undefined,
@@ -237,6 +237,10 @@ export const useSessionStore = defineStore('session', () => {
     return kind === 'call' ? !ll.callUsed : !ll.twoAnswersUsed;
   }
 
+  function canUseRoulette(team: 'A'|'B') {
+    return !state.value.teams[team].lifelines.rouletteUsed;
+  }
+
   function useTwoAnswers(team: 'A'|'B') {
     if (!canUseLifeline(team, 'twoAnswers')) return;
     state.value.teams[team].lifelines.twoAnswersUsed = true;
@@ -293,6 +297,8 @@ export const useSessionStore = defineStore('session', () => {
         state.value.currentDouble = true
         break
     }
+  // تعليم استخدام العجلة لهذا الفريق
+  state.value.teams[actingTeam].lifelines.rouletteUsed = true
     saveState()
   }
 
@@ -311,6 +317,6 @@ export const useSessionStore = defineStore('session', () => {
   // timer controls
   paused, pauseTimer, resumeTimer,
   // roulette
-  applyRoulette
+  applyRoulette, canUseRoulette
   }
 })

@@ -6,7 +6,6 @@ import { loadQuestions } from '../services/questions'
 import type { SeedCategory, Points } from '../types'
 import LifelineBar from '../components/LifelineBar.vue'
 import TimerOverlay from '../components/TimerOverlay.vue'
-import RouletteModal from '../components/RouletteModal.vue'
 
 const router = useRouter()
 const s = useSessionStore()
@@ -23,18 +22,12 @@ onMounted(async () => {
     router.push({ name: 'setup' })
     return
   }
-  
-  // Check if game is ended, redirect to results
   if (s.state.status === 'ended') {
     router.push({ name: 'results' })
     return
   }
-  
-  // تحميل الأسئلة أولاً
   all.value = await loadQuestions()
-  
   await s.initBoardPicks()
-  // Preload صور الفئات
   selectedCats.value.forEach(c => {
     if (c?.image) {
       const link = document.createElement('link')
@@ -47,7 +40,6 @@ onMounted(async () => {
 })
 
 function backToSetup() { router.push({ name: 'setup' }) }
-
 function endGame() {
   if (confirm('هل أنت متأكد من إنهاء المباراة؟ يمكنك استئنافها لاحقاً من صفحة النتائج.')) {
     s.endGame()
@@ -56,51 +48,27 @@ function endGame() {
 }
 
 function onCellClick(slug: string, pts: Points, idx: number) {
-  // حساب الفهرس الصحيح بناءً على صف الشبكة
   let correctIndex: number
-  if (idx === 0 || idx === 1) {
-    // صفوف 200 نقطة
-    correctIndex = idx
-  } else if (idx === 2 || idx === 3) {
-    // صفوف 400 نقطة 
-    correctIndex = idx - 2
-  } else {
-    // صفوف 600 نقطة
-    correctIndex = idx - 4
-  }
-  
+  if (idx === 0 || idx === 1) correctIndex = idx
+  else if (idx === 2 || idx === 3) correctIndex = idx - 2
+  else correctIndex = idx - 4
   if (s.cellUsed(slug, pts, correctIndex)) return
   s.openCell(slug, pts, correctIndex)
   router.push({ name: 'question' })
 }
 
 function isDisabled(slug: string, pts: Points, idx: number) {
-  // حساب الفهرس الصحيح بناءً على صف الشبكة
   let correctIndex: number
-  if (idx === 0 || idx === 1) {
-    // صفوف 200 نقطة
-    correctIndex = idx
-  } else if (idx === 2 || idx === 3) {
-    // صفوف 400 نقطة 
-    correctIndex = idx - 2
-  } else {
-    // صفوف 600 نقطة
-    correctIndex = idx - 4
-  }
-  
+  if (idx === 0 || idx === 1) correctIndex = idx
+  else if (idx === 2 || idx === 3) correctIndex = idx - 2
+  else correctIndex = idx - 4
   return s.cellUsed(slug, pts, correctIndex)
 }
 
 function handleImageError(event: Event) {
   const target = event.target as HTMLImageElement
-  if (target) {
-    target.style.display = 'none'
-  }
+  if (target) target.style.display = 'none'
 }
-
-const rouletteOpen = ref(false)
-function openRoulette() { rouletteOpen.value = true }
-function closeRoulette() { rouletteOpen.value = false }
 </script>
 
 <template>
@@ -111,13 +79,11 @@ function closeRoulette() { rouletteOpen.value = false }
         <div class="px-3 py-1 rounded-lg glass text-sm">
           الدور الحالي: <span class="font-bold">{{ s.state.currentTurn === 'A' ? s.state.teams.A.name : s.state.teams.B.name }}</span>
         </div>
-        <button class="btn-secondary" @click="openRoulette">عجلة الحظ</button>
         <button class="btn-danger" @click="endGame">إنهاء اللعبة</button>
         <button class="btn-secondary" @click="backToSetup()">رجوع للإعداد</button>
       </div>
     </header>
 
-    <!-- النقاط -->
     <div class="glass rounded-2xl p-4 mb-4">
       <LifelineBar :disabled="true" />
     </div>
@@ -135,24 +101,17 @@ function closeRoulette() { rouletteOpen.value = false }
       </div>
     </section>
 
-    <!-- الشبكة -->
     <section class="overflow-x-auto">
-  <div class="grid grid-cols-6 gap-3 min-w-[900px]">
-        <!-- رؤوس الأعمدة (الفئات) -->
-  <div v-for="cat in selectedCats" :key="cat.slug"
-       class="rounded-md overflow-hidden card text-white text-center">
-    <div class="aspect-[16/9] bg-black/10 flex items-center justify-center">
-            <img v-if="cat.image" 
-                 :src="cat.image" 
-                 :alt="cat.name" 
-                 class="h-full w-full object-cover"
-                 @error="handleImageError" />
+      <div class="grid grid-cols-6 gap-3 min-w-[900px]">
+        <div v-for="cat in selectedCats" :key="cat.slug"
+             class="rounded-md overflow-hidden card text-white text-center">
+          <div class="aspect-[16/9] bg-black/10 flex items-center justify-center">
+            <img v-if="cat.image" :src="cat.image" :alt="cat.name" class="h-full w-full object-cover" @error="handleImageError" />
             <div v-else class="text-gray-400 text-xs">{{ cat.name }}</div>
           </div>
           <div class="p-2 font-semibold text-sm">{{ cat.name }}</div>
         </div>
 
-        <!-- صفوف النقاط (200,200,400,400,600,600) -->
         <template v-for="rowIdx in 6" :key="rowIdx">
           <button
             v-for="cat in selectedCats"
@@ -185,6 +144,5 @@ function closeRoulette() { rouletteOpen.value = false }
     </section>
 
     <TimerOverlay />
-  <RouletteModal :open="rouletteOpen" :team="s.state.currentTurn || 'A'" @close="closeRoulette" />
   </main>
 </template>

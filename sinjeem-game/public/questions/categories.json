@@ -9,5 +9,6 @@
   { "slug": "noWords",      "name": "ولا كلمة",          "image": "/media/categories/noWords.jfif" },
   { "slug": "pictures",     "name": "تحدي الصور",        "image": "/media/categories/pictures.jfif" },
   { "slug": "championsleague", "name": "دوري أبطال أوروبا", "image": "/media/categories/champions_league.png" },
-  { "slug": "islamic",      "name": "إسلاميات",          "image": "/media/categories/islamic.jfif" }
+  { "slug": "islamic",      "name": "إسلاميات",          "image": "/media/categories/islamic.jfif" },
+  { "slug": "whoami",       "name": "من أنا",             "image": "/media/categories/whoami.jfif" }
 ]

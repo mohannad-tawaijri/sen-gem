@@ -8,6 +8,7 @@ import type { SeedCategory } from '../types'
 import QrCode from '../components/QrCode.vue'
 import LifelineBar from '../components/LifelineBar.vue'
 import TimerOverlay from '../components/TimerOverlay.vue'
+import RouletteModal from '../components/RouletteModal.vue'
 import { markSeen } from '../services/api'
 
 const router = useRouter()
@@ -57,6 +58,10 @@ const qrUrl = computed(() => {
 // Timer: count up from 0 and keep running until leaving/revealing
 const elapsed = ref(0)
 const timerInterval = ref<ReturnType<typeof setInterval> | null>(null)
+// حالة عجلة الحظ أثناء السؤال
+const rouletteOpen = ref(false)
+function openRoulette(){ if (!s.state.current) return; rouletteOpen.value = true }
+function closeRoulette(){ rouletteOpen.value = false }
 
 onMounted(async () => {
   if (!s.state.current) {
@@ -166,14 +171,15 @@ function getImageUrl(url: string): string {
     <!-- Timer Header -->
     <header class="flex items-center justify-between mb-6">
       <div class="heading text-2xl">{{ s.state.current?.difficulty }} نقطة</div>
-      <div class="text-xl font-mono px-3 py-1 rounded-lg glass flex items-center gap-2">
+      <div class="text-xl font-mono px-3 py-1 rounded-lg glass flex items-center gap-3 select-none">
+        <button @click="s.paused ? s.resumeTimer() : s.pauseTimer()" class="w-9 h-9 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 transition" :title="s.paused ? 'استئناف' : 'إيقاف'">
+          <svg v-if="!s.paused" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
         <span>{{ Math.floor(elapsed / 60) }}:{{ (elapsed % 60).toString().padStart(2, '0') }}</span>
-        <span class="text-xs opacity-70" v-if="s.paused">(متوقف)</span>
       </div>
       <div class="flex items-center gap-2">
-        <button @click="s.paused ? s.resumeTimer() : s.pauseTimer()" class="btn-secondary">
-          {{ s.paused ? 'استئناف' : 'إيقاف مؤقت' }}
-        </button>
+        <button @click="openRoulette" class="btn-secondary">عجلة الحظ</button>
         <button @click="backToBoard" class="btn-secondary">إلغاء</button>
       </div>
     </header>
@@ -219,6 +225,7 @@ function getImageUrl(url: string): string {
 
   <!-- Overlay for lifeline timers -->
   <TimerOverlay />
+  <RouletteModal :open="rouletteOpen" :team="s.state.currentTurn || 'A'" @close="closeRoulette" />
   </main>
   
   <div v-else class="flex items-center justify-center min-h-screen">
