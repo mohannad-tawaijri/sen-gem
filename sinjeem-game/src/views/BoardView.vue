@@ -69,6 +69,13 @@ function handleImageError(event: Event) {
   const target = event.target as HTMLImageElement
   if (target) target.style.display = 'none'
 }
+
+// تعديل النقاط يدويًا (+/- 100) لتصحيح الأخطاء بسرعة
+function adjust(team: 'A'|'B', delta: number) {
+  const cur = s.state.teams[team].score
+  const next = Math.max(0, cur + delta)
+  s.setScore(team, next)
+}
 </script>
 
 <template>
@@ -93,11 +100,19 @@ function handleImageError(event: Event) {
         <div class="text-sm text-gray-500 mb-1">فريق أ</div>
         <div class="text-xl font-bold text-white">{{ s.state.teams.A.name }}</div>
         <div class="text-3xl mt-1 text-blue-300 font-extrabold">{{ s.state.teams.A.score }}</div>
+        <div class="flex justify-center gap-2 mt-3">
+          <button @click="adjust('A', -100)" class="px-3 py-1 rounded-lg bg-red-600/30 hover:bg-red-600/50 text-sm">-100</button>
+          <button @click="adjust('A', +100)" class="px-3 py-1 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 text-sm">+100</button>
+        </div>
       </div>
       <div class="rounded-xl card p-4 text-center">
         <div class="text-sm text-gray-500 mb-1">فريق ب</div>
         <div class="text-xl font-bold text-white">{{ s.state.teams.B.name }}</div>
         <div class="text-3xl mt-1 text-emerald-300 font-extrabold">{{ s.state.teams.B.score }}</div>
+        <div class="flex justify-center gap-2 mt-3">
+          <button @click="adjust('B', -100)" class="px-3 py-1 rounded-lg bg-red-600/30 hover:bg-red-600/50 text-sm">-100</button>
+            <button @click="adjust('B', +100)" class="px-3 py-1 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 text-sm">+100</button>
+        </div>
       </div>
     </section>
 

@@ -283,22 +283,29 @@ export const useSessionStore = defineStore('session', () => {
     if (!state.value.current) return
     const base = state.value.current.difficulty
     const other: TeamId = actingTeam === 'A' ? 'B' : 'A'
-    switch (outcome) {
-      case 'gain':
-        state.value.teams[actingTeam].score += base
-        break
-      case 'lose':
-        state.value.teams[actingTeam].score -= base
-        break
-      case 'opponentLose':
-        state.value.teams[other].score -= base
-        break
-      case 'double':
-        state.value.currentDouble = true
-        break
+    if (outcome === 'double') {
+      // تفعيل مضاعفة السؤال فقط، ولا نُغلق السؤال
+      state.value.currentDouble = true
+      state.value.teams[actingTeam].lifelines.rouletteUsed = true
+      saveState()
+      return
     }
-  // تعليم استخدام العجلة لهذا الفريق
-  state.value.teams[actingTeam].lifelines.rouletteUsed = true
+    // تطبيق النتائج الأخرى وإنهاء السؤال مباشرة
+    if (outcome === 'gain') {
+      state.value.teams[actingTeam].score += base
+    } else if (outcome === 'lose') {
+      state.value.teams[actingTeam].score = Math.max(0, state.value.teams[actingTeam].score - base)
+    } else if (outcome === 'opponentLose') {
+      state.value.teams[other].score = Math.max(0, state.value.teams[other].score - base)
+    }
+    // إنهاء السؤال: اعتباره مستهلكًا والانتقال للدور التالي
+    if (state.value.current) {
+      state.value.usedIds![state.value.current.qid] = true
+      state.value.current = undefined
+      state.value.currentDouble = false
+      state.value.currentTurn = other
+    }
+    state.value.teams[actingTeam].lifelines.rouletteUsed = true
     saveState()
   }
 

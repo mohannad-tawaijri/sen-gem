@@ -8,10 +8,11 @@ const emit = defineEmits<{ (e:'close'): void }>()
 const s = useSessionStore()
 
 // القطاعات (يمكن تعديل الألوان أو الأوزان لاحقًا)
+// مخرجات العجلة (تم تحديث نص الربح حسب الطلب)
 const segments = [
-  { key: 'gain', label: 'اربح النقاط', color: '#10b981' },
-  { key: 'double', label: 'مضاعفة', color: '#6366f1' },
-  { key: 'lose', label: 'اخسر النقاط', color: '#ef4444' },
+  { key: 'gain', label: 'اكسب نقاط السؤال', color: '#10b981' },
+  { key: 'double', label: 'مضاعفة السؤال', color: '#6366f1' },
+  { key: 'lose', label: 'اخسر نقاطك', color: '#ef4444' },
   { key: 'opponentLose', label: 'خصم من الخصم', color: '#f59e0b' },
 ] as const
 
@@ -43,7 +44,8 @@ function spin() {
 function applyResult() {
   if (!resultKey.value) return
   s.applyRoulette(resultKey.value as any, props.team)
-  if (resultKey.value !== 'double') emit('close')
+  // يتم إغلاق النافذة دائمًا بعد التنفيذ؛ في حالة المضاعفة يبقى السؤال مفتوحًا
+  emit('close')
 }
 </script>
 

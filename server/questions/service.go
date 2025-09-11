@@ -38,6 +38,7 @@ var canonicalCategories = map[string]struct{}{
 	"pictures":        {},
 	"championsleague": {},
 	"islamic":         {},
+	"whoami":          {}, // Added missing category so backend recognizes "من أنا"
 }
 
 // aliases from data tag -> canonical UI slug
@@ -58,6 +59,7 @@ var canonByLower = map[string]string{
 	"pictures":        "pictures",
 	"championsleague": "championsleague",
 	"islamic":         "islamic",
+	"whoami":          "whoami",
 }
 
 func canonicalizeSlug(name string) string {

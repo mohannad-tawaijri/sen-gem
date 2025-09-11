@@ -8,7 +8,6 @@ import type { SeedCategory } from '../types'
 import QrCode from '../components/QrCode.vue'
 import LifelineBar from '../components/LifelineBar.vue'
 import TimerOverlay from '../components/TimerOverlay.vue'
-import RouletteModal from '../components/RouletteModal.vue'
 import { markSeen } from '../services/api'
 
 const router = useRouter()
@@ -58,10 +57,7 @@ const qrUrl = computed(() => {
 // Timer: count up from 0 and keep running until leaving/revealing
 const elapsed = ref(0)
 const timerInterval = ref<ReturnType<typeof setInterval> | null>(null)
-// حالة عجلة الحظ أثناء السؤال
-const rouletteOpen = ref(false)
-function openRoulette(){ if (!s.state.current) return; rouletteOpen.value = true }
-function closeRoulette(){ rouletteOpen.value = false }
+// أُزيل زر عجلة الحظ من أعلى الصفحة؛ الاستخدام الآن عبر شريط وسائل المساعدة فقط
 
 onMounted(async () => {
   if (!s.state.current) {
@@ -179,7 +175,6 @@ function getImageUrl(url: string): string {
         <span>{{ Math.floor(elapsed / 60) }}:{{ (elapsed % 60).toString().padStart(2, '0') }}</span>
       </div>
       <div class="flex items-center gap-2">
-        <button @click="openRoulette" class="btn-secondary">عجلة الحظ</button>
         <button @click="backToBoard" class="btn-secondary">إلغاء</button>
       </div>
     </header>
@@ -225,7 +220,6 @@ function getImageUrl(url: string): string {
 
   <!-- Overlay for lifeline timers -->
   <TimerOverlay />
-  <RouletteModal :open="rouletteOpen" :team="s.state.currentTurn || 'A'" @close="closeRoulette" />
   </main>
   
   <div v-else class="flex items-center justify-center min-h-screen">
