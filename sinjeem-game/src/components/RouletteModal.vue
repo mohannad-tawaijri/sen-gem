@@ -64,29 +64,29 @@ function applyOutcome(rk: Key) {
 }
 
 // أسلوب رسم مرئي أوضح باستخدام conic-gradient لجميع القطاعات
-const wheelStyle = computed(() => {
-  const per = 360 / segments.length
-  const parts = segments.map((seg, i) => {
-    const start = i * per
-    const end = (i + 1) * per
-    return `${seg.color} ${start}deg ${end}deg`
-  })
-  return {
-    background: `conic-gradient(${parts.join(',')})`,
-    transition: 'transform 3.3s cubic-bezier(.25,.8,.3,1)',
-    transform: `rotate(${rotation.value}deg)`
-  }
-})
+// زاويا مساعدة
+const segAngle = computed(() => 360 / segments.length)
 
-// حساب موضع تسمية كل قطاع (بدلاً من سكربت ثانٍ منفصل)
-function labelStyle(i: number) {
-  const count = segments.length
-  const per = 360 / count
-  const mid = i * per + per / 2
+function wedgeStyle(i: number, color: string) {
+  const a = segAngle.value
   return {
-    transform: `rotate(${mid}deg) translate(0,-38%) rotate(-${mid}deg)`
+    background: color,
+    transform: `rotate(${i * a}deg) skewY(${90 - a}deg)`
   }
 }
+
+function labelWrapperStyle(i: number) {
+  const a = segAngle.value
+  const mid = i * a + a / 2
+  return {
+    transform: `rotate(${mid}deg) translate(-50%, -135%) rotate(-${mid}deg)`
+  }
+}
+
+const wheelRotationStyle = computed(() => ({
+  transition: 'transform 3.3s cubic-bezier(.25,.8,.3,1)',
+  transform: `rotate(${rotation.value}deg)`
+}))
 </script>
 
 <template>
@@ -99,12 +99,13 @@ function labelStyle(i: number) {
         <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
           <div class="w-0 h-0 border-l-6 border-r-6 border-b-12 border-l-transparent border-r-transparent border-b-yellow-400"></div>
         </div>
-        <!-- العجلة المحسنة -->
-        <div class="w-72 h-72 rounded-full border-4 border-white/20 shadow-inner relative overflow-hidden" :style="wheelStyle">
-          <div v-for="(seg,i) in segments" :key="seg.key"
-               class="absolute top-1/2 left-1/2 font-bold text-[12px] leading-tight text-black text-center w-28"
-               :style="labelStyle(i)">
-            <span class="px-1 rounded bg-black/10 backdrop-blur-sm block whitespace-normal drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+        <!-- عجلة بقطاعات منفصلة لتجنب تداخل النص -->
+        <div class="wheel w-72 h-72 rounded-full border-4 border-white/20 shadow-inner relative" :style="wheelRotationStyle">
+          <!-- الشرائح -->
+          <div v-for="(seg,i) in segments" :key="'wedge-'+seg.key" class="wedge absolute top-1/2 left-1/2 origin-top-left w-1/2 h-1/2" :style="wedgeStyle(i, seg.color)"></div>
+          <!-- التسميات -->
+          <div v-for="(seg,i) in segments" :key="'label-'+seg.key" class="label absolute top-1/2 left-1/2 origin-center font-bold text-[11px] text-black text-center w-24 leading-snug" :style="labelWrapperStyle(i)">
+            <span class="inline-block px-1 py-0.5 rounded bg-white/70/80 backdrop-blur-sm shadow text-[11px] whitespace-normal break-words">
               {{ seg.label }}
             </span>
           </div>
@@ -139,5 +140,7 @@ function labelStyle(i: number) {
 .border-b-12 { border-bottom-width:12px }
 .animate-fade-in { animation: fade-in .35s ease }
 @keyframes fade-in { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
+.wheel .wedge { box-shadow: inset 0 0 8px 0 rgba(0,0,0,.35); }
+.wheel .label span { backdrop-filter: blur(2px); }
 </style>
 
