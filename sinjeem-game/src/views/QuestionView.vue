@@ -179,6 +179,28 @@ function getImageUrl(url: string): string {
       </div>
     </header>
 
+    <!-- Scores Bar -->
+    <div class="flex flex-wrap items-stretch gap-4 mb-6">
+      <div class="flex-1 min-w-[180px] rounded-xl glass p-3 flex flex-col items-center relative" :class="{'ring-2 ring-emerald-400': s.state.currentTurn==='A'}">
+        <div class="text-sm text-gray-300 flex items-center gap-1">
+          <span v-if="s.state.currentTurn==='A'" class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          {{ s.state.teams.A.name }}
+        </div>
+        <div class="text-3xl font-extrabold text-blue-300 tracking-wide">{{ s.state.teams.A.score }}</div>
+      </div>
+      <div class="flex-1 min-w-[180px] rounded-xl glass p-3 flex flex-col items-center relative" :class="{'ring-2 ring-emerald-400': s.state.currentTurn==='B'}">
+        <div class="text-sm text-gray-300 flex items-center gap-1">
+          <span v-if="s.state.currentTurn==='B'" class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          {{ s.state.teams.B.name }}
+        </div>
+        <div class="text-3xl font-extrabold text-emerald-300 tracking-wide">{{ s.state.teams.B.score }}</div>
+      </div>
+      <div v-if="s.state.currentDouble" class="px-4 py-3 rounded-xl bg-indigo-600/20 border border-indigo-400/40 text-indigo-200 text-sm flex items-center gap-2">
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' class="w-5 h-5" fill="currentColor"><path d="M12 3l2.09 6.26H21l-5.17 3.76L17.91 21 12 16.99 6.09 21l2.08-7.98L3 9.26h6.91z"/></svg>
+        سؤال مُضاعف (x2)
+      </div>
+    </div>
+
     <!-- Lifelines visible during the question -->
   <LifelineBar />
 
