@@ -77,6 +77,16 @@ const wheelStyle = computed(() => {
     transform: `rotate(${rotation.value}deg)`
   }
 })
+
+// حساب موضع تسمية كل قطاع (بدلاً من سكربت ثانٍ منفصل)
+function labelStyle(i: number) {
+  const count = segments.length
+  const per = 360 / count
+  const mid = i * per + per / 2
+  return {
+    transform: `rotate(${mid}deg) translate(0,-38%) rotate(-${mid}deg)`
+  }
+}
 </script>
 
 <template>
@@ -131,20 +141,3 @@ const wheelStyle = computed(() => {
 @keyframes fade-in { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
 </style>
 
-<script lang="ts">
-// جزء ثانٍ لتعريف دالة labelStyle بدون إفساد setup (بديل سريع)
-export default {
-  methods: {
-    labelStyle(i: number) {
-      const count = 4
-      const per = 360 / count
-      const mid = i * per + per / 2
-      // ضع النص داخل القطاع بعمق 38% من القطر تقريباً
-      return {
-        transform: `rotate(${mid}deg) translate(0,-38%) rotate(-${mid}deg)`
-      }
-    }
-  }
-}
-</script>
-</style>
