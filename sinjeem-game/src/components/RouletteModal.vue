@@ -22,6 +22,7 @@ type Key = typeof segments[number]['key']
 const spinning = ref(false)
 const rotation = ref(0)
 const resultKey = ref<Key | null>(null)
+const resultReady = ref(false) // ظهور نافذة النتيجة بعد توقف العجلة
 const router = useRouter()
 
 const title = computed(() => `عجلة الحظ - دور ${props.team === 'A' ? 'فريق أ' : 'فريق ب'}`)
@@ -29,6 +30,7 @@ const title = computed(() => `عجلة الحظ - دور ${props.team === 'A' ? 
 function spin() {
   if (spinning.value) return
   resultKey.value = null
+  resultReady.value = false
   spinning.value = true
   const fullRotations = 5 + Math.random() * 3 // 5-8 دورات
   const segAngle = 360 / segments.length
@@ -39,21 +41,25 @@ function spin() {
   setTimeout(() => {
     spinning.value = false
     resultKey.value = segments[chosenIndex].key
-    applyResult()
+    // لا نطبق النتيجة فوراً؛ نعرضها أولاً مع زر "حسناً"
+    resultReady.value = true
   }, 3300)
 }
 
-function applyResult() {
+function confirmResult() {
   if (!resultKey.value) return
   const rk = resultKey.value
+  applyOutcome(rk)
+}
+
+function applyOutcome(rk: Key) {
   s.applyRoulette(rk as any, props.team)
-  // غير المضاعفة: الرجوع مباشرةً للوحة
-  if (rk !== 'double') {
+  if (rk === 'double') {
+    // البقاء في نفس السؤال
+    emit('close')
+  } else {
     emit('close')
     router.push({ name: 'board' })
-  } else {
-    // للمضاعفة: فقط أغلق النافذة وابق في نفس السؤال
-    emit('close')
   }
 }
 
@@ -84,21 +90,33 @@ const wheelStyle = computed(() => {
           <div class="w-0 h-0 border-l-6 border-r-6 border-b-12 border-l-transparent border-r-transparent border-b-yellow-400"></div>
         </div>
         <!-- العجلة المحسنة -->
-        <div class="w-72 h-72 rounded-full border-4 border-white/20 shadow-inner relative" :style="wheelStyle">
+        <div class="w-72 h-72 rounded-full border-4 border-white/20 shadow-inner relative overflow-hidden" :style="wheelStyle">
           <div v-for="(seg,i) in segments" :key="seg.key"
-               class="absolute top-1/2 left-1/2 font-bold text-[11px] text-black text-center w-24 -translate-x-1/2 -translate-y-1/2"
-               :style="{ transform: 'rotate(' + (i*(360/segments.length) + (360/segments.length)/2) + 'deg) translate(0,-115%) rotate(-' + (i*(360/segments.length) + (360/segments.length)/2) + 'deg)' }">
-            <span class="drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{{ seg.label }}</span>
+               class="absolute top-1/2 left-1/2 font-bold text-[12px] leading-tight text-black text-center w-28"
+               :style="labelStyle(i)">
+            <span class="px-1 rounded bg-black/10 backdrop-blur-sm block whitespace-normal drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+              {{ seg.label }}
+            </span>
           </div>
         </div>
       </div>
 
-      <div class="text-center space-y-3">
+      <div class="text-center space-y-3" v-if="!resultReady">
         <button @click="spin" :disabled="spinning" class="btn-primary w-full py-3 text-lg disabled:opacity-50">
           {{ spinning ? 'جاري الدوران...' : 'دَوِّر العجلة' }}
         </button>
-        <p v-if="resultKey" class="text-sm text-emerald-300">النتيجة: {{ segments.find(sg=>sg.key===resultKey)?.label }}</p>
-        <button class="btn-secondary w-full" @click="$emit('close')">إغلاق</button>
+        <button class="btn-secondary w-full" @click="emit('close')" :disabled="spinning">إغلاق</button>
+      </div>
+
+      <!-- نافذة النتيجة بعد التوقف -->
+      <div v-else class="space-y-4 text-center animate-fade-in">
+        <div class="text-lg font-bold text-emerald-300">
+          النتيجة:
+          <span class="ml-2 text-white">{{ segments.find(sg=>sg.key===resultKey)?.label }}</span>
+        </div>
+        <p v-if="resultKey === 'double'" class="text-sm text-indigo-300">تم تفعيل مضاعفة السؤال — استمر بالإجابة.</p>
+        <p v-else class="text-sm text-gray-300">سيتم تنفيذ التأثير والعودة للوحة.</p>
+        <button class="btn-primary w-full py-3 text-lg" @click="confirmResult">حسناً</button>
       </div>
     </div>
   </div>
@@ -109,4 +127,24 @@ const wheelStyle = computed(() => {
 .border-l-6 { border-left-width:6px }
 .border-r-6 { border-right-width:6px }
 .border-b-12 { border-bottom-width:12px }
+.animate-fade-in { animation: fade-in .35s ease }
+@keyframes fade-in { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
+</style>
+
+<script lang="ts">
+// جزء ثانٍ لتعريف دالة labelStyle بدون إفساد setup (بديل سريع)
+export default {
+  methods: {
+    labelStyle(i: number) {
+      const count = 4
+      const per = 360 / count
+      const mid = i * per + per / 2
+      // ضع النص داخل القطاع بعمق 38% من القطر تقريباً
+      return {
+        transform: `rotate(${mid}deg) translate(0,-38%) rotate(-${mid}deg)`
+      }
+    }
+  }
+}
+</script>
 </style>
