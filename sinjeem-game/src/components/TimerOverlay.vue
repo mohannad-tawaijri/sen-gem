@@ -50,7 +50,7 @@ function close(){ s.closeOverlay() }
 <template>
   <div v-if="overlay?.active" class="fixed inset-0 bg-black/70 z-50 grid place-items-center p-6">
     <div class="rounded-2xl card w-full max-w-md p-6 text-center text-white">
-      <!-- <div class="text-sm text-gray-300 mb-1">مساعدة: اتصال بصديق</div> -->
+      <div class="text-sm text-gray-300 mb-1">مساعدة: اتصال بصديق</div>
       <div class="text-xl font-semibold mb-2">
         {{ overlay?.team === 'A' ? 'فريق أ' : 'فريق ب' }}
       </div>
