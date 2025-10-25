@@ -13,7 +13,7 @@ interface AnswerState {
 
 export const useSessionStore = defineStore('session', () => {
   const state = ref<SessionState>({
-    version: 2,
+    version: 3,
     createdAt: new Date().toISOString(),
     config: {
       questionTimeSec: 60,
@@ -36,15 +36,42 @@ export const useSessionStore = defineStore('session', () => {
 
   const currentAnswer = ref<AnswerState | null>(null)
 
-  // تحميل الحالة من localStorage
+  // رقم الإصدار الحالي للـstate schema
+  const CURRENT_VERSION = 3
+  const migrationHappened = ref(false)
+
+  // تحميل الحالة من localStorage مع migration تلقائي
   const loadState = () => {
     const saved = localStorage.getItem('sessionState')
     if (saved) {
       try {
         const parsed = JSON.parse(saved)
+        
+        // التحقق من إصدار البيانات
+        const savedVersion = parsed.version || 1
+        
+        if (savedVersion < CURRENT_VERSION) {
+          console.warn(`🔄 اكتشاف بيانات قديمة (v${savedVersion}). سيتم تحديثها إلى v${CURRENT_VERSION}`)
+          migrationHappened.value = true
+          
+          // Migration: مسح selectedForBoard إذا كانت البيانات قديمة
+          // هذا يجبر اللعبة على إعادة اختيار الأسئلة مع الفئات الجديدة
+          if (parsed.selectedForBoard) {
+            console.log('🗑️ مسح selectedForBoard القديم - سيتم إعادة بناءه مع الفئات المحدثة')
+            parsed.selectedForBoard = undefined
+          }
+          
+          // تحديث رقم الإصدار
+          parsed.version = CURRENT_VERSION
+          
+          // حفظ البيانات المحدّثة
+          localStorage.setItem('sessionState', JSON.stringify(parsed))
+        }
+        
         state.value = { ...state.value, ...parsed }
       } catch (err) {
         console.error('فشل في تحميل الحالة:', err)
+        // في حالة الفشل، استخدم state نظيف
       }
     }
   }
@@ -92,7 +119,7 @@ export const useSessionStore = defineStore('session', () => {
 
   const hardReset = () => {
     state.value = {
-      version: 2,
+      version: 3,
       createdAt: new Date().toISOString(),
       config: {
         questionTimeSec: 60,
@@ -336,7 +363,7 @@ export const useSessionStore = defineStore('session', () => {
   loadState()
 
   return {
-  state, setTeamName, setScore, addScore, setConfig,
+  state, migrationHappened, setTeamName, setScore, addScore, setConfig,
     setSelectedSlugs, softReset, hardReset,
     initBoardPicks, openCell, revealAnswer, award, cellUsed,
   currentAnswer,
