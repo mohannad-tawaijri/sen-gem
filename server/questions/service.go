@@ -39,6 +39,7 @@ var canonicalCategories = map[string]struct{}{
 	"championsleague": {},
 	"islamic":         {},
 	"whoami":          {}, // Added missing category so backend recognizes "من أنا"
+	"aot":             {},
 }
 
 // aliases from data tag -> canonical UI slug
@@ -60,6 +61,7 @@ var canonByLower = map[string]string{
 	"championsleague": "championsleague",
 	"islamic":         "islamic",
 	"whoami":          "whoami",
+	"aot":             "aot",
 }
 
 func canonicalizeSlug(name string) string {
@@ -445,17 +447,31 @@ func (s *Service) MarkSeenByID(userID uint, qid string) (bool, error) {
 	return s.tryMarkSeen(userID, *q)
 }
 
-// MatchesCategory checks if any of the question tags match the requested category (with alias)
+// MatchesCategory checks if the question belongs to the requested category
+// It only matches against canonical category tags, not other descriptive tags
 func MatchesCategory(tags []string, requested string) bool {
 	req := requested
-	// normalize requested if it's an alias key (we accept canonical slugs from UI)
-	// Here aliases map is from data tag -> canonical; requested usually is canonical already
-	for _, t := range tags {
-		if t == req {
-			return true
+	// Check if requested category is in the canonical list
+	if _, ok := canonicalCategories[req]; !ok {
+		// If not canonical, check if it's an alias
+		if canon, ok := categoryAliases[req]; ok {
+			req = canon
 		}
-		if canon, ok := categoryAliases[t]; ok && canon == req {
-			return true
+	}
+	// Now check if the question has the requested category as a tag
+	// We only match against canonical categories to avoid cross-category pollution
+	for _, t := range tags {
+		// Direct match with canonical category
+		if t == req {
+			if _, ok := canonicalCategories[t]; ok {
+				return true
+			}
+		}
+		// Match via alias
+		if canon, ok := categoryAliases[t]; ok {
+			if canon == req {
+				return true
+			}
 		}
 	}
 	return false
