@@ -52,12 +52,20 @@
             />
           </div>
 
-          <div class="flex justify-between">
+          <div class="flex justify-between items-center">
             <button 
               @click="$router.push('/')"
               class="btn-secondary"
             >
               ← العودة
+            </button>
+            
+            <button 
+              @click="clearCache"
+              class="btn-secondary text-orange-400 border-orange-600 hover:bg-orange-600/20 text-sm"
+              title="امسح البيانات المخزنة محلياً إذا واجهت مشاكل في تحميل الأسئلة"
+            >
+              🧹 مسح البيانات المحلية
             </button>
             
             <div class="text-right">
@@ -144,6 +152,15 @@ const loadCategoriesData = async () => {
 const startGame = () => {
   if (selectedCategories.value.length !== 6) return
   router.push('/board')
+}
+
+const clearCache = () => {
+  if (confirm('⚠️ هذا سيمسح جميع البيانات المحلية المحفوظة (أسماء الفرق، النقاط، الأسئلة المستخدمة). هل أنت متأكد؟')) {
+    localStorage.clear()
+    sessionStore.hardReset()
+    alert('✅ تم مسح البيانات بنجاح! سيتم تحديث الصفحة...')
+    window.location.reload()
+  }
 }
 
 onMounted(() => {

@@ -14,7 +14,6 @@ const segments = [
   { key: 'gain', label: 'اكسب نقاط السؤال', color: '#10b981' },
   { key: 'double', label: 'مضاعفة السؤال', color: '#6366f1' },
   { key: 'lose', label: 'اخسر نقاطك', color: '#ef4444' },
-  { key: 'opponentLose', label: 'خصم من الخصم', color: '#f59e0b' },
 ] as const
 
 type Key = typeof segments[number]['key']
@@ -121,8 +120,8 @@ const wheelRotationStyle = computed(() => ({
 
       <div class="relative mx-auto w-80 h-80 mb-6 select-none">
         <!-- السهم -->
-        <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-20">
-          <div class="w-0 h-0 border-l-12 border-r-12 border-b-20 border-l-transparent border-r-transparent border-b-yellow-400 drop-shadow-lg"></div>
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 z-20">
+          <div class="arrow-pointer"></div>
         </div>
         
         <!-- عجلة باستخدام SVG لوضوح أفضل -->
@@ -193,10 +192,15 @@ const wheelRotationStyle = computed(() => ({
 </template>
 
 <style scoped>
-/* سماكة حدود السهم */
-.border-l-12 { border-left-width: 12px; }
-.border-r-12 { border-right-width: 12px; }
-.border-b-20 { border-bottom-width: 20px; }
+/* السهم */
+.arrow-pointer {
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 24px solid #ef4444;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
 
 .animate-fade-in { 
   animation: fade-in .35s ease;

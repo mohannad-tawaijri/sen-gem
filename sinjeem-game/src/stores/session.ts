@@ -133,6 +133,15 @@ export const useSessionStore = defineStore('session', () => {
     const all = await loadQuestions()
     const bySlug = new Map(all.map(c => [c.slug, c]))
 
+    // تحقق من أن جميع الفئات المختارة موجودة
+    const missingCategories = state.value.selectedCategorySlugs.filter(slug => !bySlug.has(slug))
+    if (missingCategories.length > 0) {
+      console.error(`❌ فئات مفقودة من ملفات الأسئلة:`, missingCategories)
+      console.error(`💡 الحل: امسح localStorage من صفحة الإعدادات أو استخدم: localStorage.clear()`)
+      alert(`⚠️ خطأ: بعض الفئات المختارة غير موجودة (${missingCategories.join(', ')})\n\nالرجاء مسح البيانات المحلية من صفحة الإعدادات.`)
+      return
+    }
+
     const picks: SelectedForBoard = {}
     for (const slug of state.value.selectedCategorySlugs) {
       const cat = bySlug.get(slug)
@@ -185,9 +194,21 @@ export const useSessionStore = defineStore('session', () => {
   }
 
   const openCell = (slug: string, difficulty: Points, index: number) => {
-    if (!state.value.selectedForBoard) return
+    if (!state.value.selectedForBoard) {
+      console.error(`❌ selectedForBoard غير موجود! يرجى إعادة تهيئة اللوحة`)
+      return
+    }
+    
     const diffKey = String(difficulty) as '200'|'400'|'600'
     const availableQuestions = state.value.selectedForBoard[slug]?.[diffKey] || []
+    
+    if (availableQuestions.length === 0) {
+      console.error(`❌ لا توجد أسئلة متاحة للفئة ${slug} - الصعوبة ${difficulty}`)
+      console.error(`📊 selectedForBoard:`, state.value.selectedForBoard)
+      console.error(`📊 selectedCategorySlugs:`, state.value.selectedCategorySlugs)
+      console.error(`💡 الحل: امسح localStorage أو ابدأ لعبة جديدة`)
+      return
+    }
     
     // تأكد من أن الـ index صحيح (0 أو 1 فقط)
     const safeIndex = Math.min(index, availableQuestions.length - 1)
