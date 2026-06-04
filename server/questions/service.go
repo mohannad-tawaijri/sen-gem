@@ -289,13 +289,6 @@ func (s *Service) NextForUser(userID uint, f Filter) (*Question, error) {
 }
 
 func (s *Service) tryMarkSeen(userID uint, q Question) (bool, error) {
-	type QS struct {
-		ID         uint   `gorm:"primaryKey"`
-		UserID     uint   `gorm:"index"`
-		QuestionID string `gorm:"index"`
-		Category   string `gorm:"index"`
-		Difficulty int    `gorm:"index"`
-	}
 	// attempt insert if not exists
 	returnErr := s.db.Transaction(func(tx *gorm.DB) error {
 		// check exists

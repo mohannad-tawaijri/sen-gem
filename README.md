@@ -1,113 +1,56 @@
-# 🎮 سنجيم (Sen-Gem) - Arabic Quiz Game Platform
+# 🎮 سين جيم (Sin Jeem)
 
 <div align="center">
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Vue](https://img.shields.io/badge/Vue-3.5-green.svg)
+![Vue](https://img.shields.io/badge/Vue-3.5-42b883.svg)
 ![Go](https://img.shields.io/badge/Go-1.22+-00ADD8.svg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6.svg)
+![Status](https://img.shields.io/badge/status-not%20maintained-lightgrey.svg)
 
-**An interactive Arabic quiz game platform featuring multiple categories, team battles, and smart question management**
-
-[Features](#-features) • [Tech Stack](#-tech-stack) • [Quick Start](#-quick-start) • [Documentation](#-documentation)
+**An interactive Arabic quiz game platform with multiple categories, team battles, lifelines, and a fortune wheel.**
 
 </div>
+
+> **Project status:** Built in 2025 as a full-stack portfolio project (Vue 3 SPA + Go API).
+> It is no longer actively maintained and the public demo is offline, but the codebase
+> remains a complete, runnable reference — follow the [Quick Start](#-quick-start) to run it locally.
 
 ---
 
 ## 📋 Overview
 
-Sen-Gem is a comprehensive quiz game platform designed for Arabic-speaking audiences. It features a dynamic question system, team-based gameplay, lifelines, and a fortune wheel mechanic. The platform supports multiple question categories including sports, entertainment, general knowledge, and more.
-
-### 🎯 Key Highlights
-
-- **Multi-Category Quiz System**: 13+ categories including Football, Game of Thrones, One Piece, Attack on Titan, and more
-- **Team Battle Mode**: Compete in teams with strategic lifelines and power-ups
-- **Smart Question Management**: Never see the same question twice with per-user tracking
-- **Fortune Wheel**: Exciting risk/reward mechanic with multiple outcomes
-- **Google OAuth Integration**: Secure authentication and user management
-- **Difficulty Levels**: Questions categorized into 200, 400, and 600 difficulty tiers
-- **Progressive Web App**: Fully responsive design that works on all devices
+**سين جيم** is a team-based Arabic trivia game. Two teams compete across a board of
+categories and difficulty tiers, using lifelines and a fortune wheel to outscore each
+other. A Go backend handles authentication and per-user question tracking so the same
+question is never served twice.
 
 ---
 
 ## ✨ Features
 
-### 🎲 Game Mechanics
-
-- **Question Categories**: 
-  - 🏴 Flags (Countries)
-  - 🎬 Game of Thrones
-  - ⚓ One Piece
-  - 🗡️ Attack on Titan
-  - ⚽ Football & Premier League
-  - 🏆 UEFA Champions League
-  - 🕌 Islamic Knowledge
-  - 🧩 General Knowledge
-  - 🖼️ Picture Challenges
-  - 🎭 Who Am I?
-  - 📝 Saudi Proverbs
-
-- **Lifelines**:
-  - 🎰 Fortune Wheel (3 uses per team)
-  - 📱 Ask a Friend
-  - ✂️ 50/50 (eliminates 2 wrong answers)
-  - ⏰ Extra Time
-
-- **Fortune Wheel Outcomes**:
-  - ✅ Gain points from current question
-  - 💎 Double the question value
-  - ❌ Lose all your points
-  - 🎯 Deduct points from opponent
-
-### 🔐 User Management
-
-- Google OAuth 2.0 authentication
-- Session-based security with HttpOnly cookies
-- Per-user question tracking (no repeated questions)
-- Progress persistence across sessions
-- Rate limiting and CSRF protection
-
-### 📊 Question System
-
-- **30 questions per category** (10 easy, 10 medium, 10 hard)
-- **1000+ total questions** across all categories
-- Dynamic difficulty selection
-- Category filtering
-- Question reset functionality
-- Alias support for legacy question IDs
+- **13+ categories** — Flags, Game of Thrones, One Piece, Attack on Titan, Football &
+  Premier League, UEFA Champions League, Islamic knowledge, General knowledge, Picture
+  challenges, Who Am I?, Proverbs, and more.
+- **Team battle mode** with scoring and strategy.
+- **Lifelines** — Fortune Wheel, Ask a Friend, 50/50, and Extra Time.
+- **Fortune Wheel outcomes** — gain points, double the value, lose your points, or
+  deduct from the opponent.
+- **Smart question tracking** — per-user history prevents repeats.
+- **Difficulty tiers** — 200 / 400 / 600 points per category.
+- **Google OAuth 2.0** and email/password auth with secure HttpOnly cookie sessions,
+  rate limiting, and CSRF protection.
+- **Responsive, RTL-aware UI** built for Arabic.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend (Vue 3 + TypeScript)
-
-```
-├── Vue 3.5         - Progressive JavaScript framework
-├── TypeScript 5.8  - Type-safe development
-├── Vite 7.0        - Lightning-fast build tool
-├── Pinia           - State management
-├── Vue Router      - Client-side routing
-├── Tailwind CSS 4  - Utility-first styling
-├── Headless UI     - Accessible components
-└── Flowbite        - UI component library
-```
-
-### Backend (Go + Gin)
-
-```
-├── Go 1.22+        - High-performance backend
-├── Gin             - Web framework
-├── GORM            - ORM with SQLite/Postgres
-├── OAuth2          - Google authentication
-└── Bcrypt          - Password hashing
-```
-
-### Database
-
-- **Development**: SQLite (embedded)
-- **Production**: PostgreSQL (recommended)
+| Layer    | Technologies                                                              |
+| -------- | ------------------------------------------------------------------------- |
+| Frontend | Vue 3.5, TypeScript 5.8, Vite 7, Pinia, Vue Router, Tailwind CSS 4        |
+| Backend  | Go 1.22+, Gin, GORM, OAuth2, Bcrypt                                        |
+| Database | SQLite (development) · PostgreSQL (production)                             |
 
 ---
 
@@ -115,173 +58,134 @@ Sen-Gem is a comprehensive quiz game platform designed for Arabic-speaking audie
 
 ### Prerequisites
 
-- **Node.js** 18+ and npm/yarn
-- **Go** 1.22+
-- **Git**
+- Node.js 18+ and npm
+- Go 1.22+
+- Git
 
-### Installation
+### 1. Clone
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/mohannad-tawaijri/sen-gem.git
-   cd sen-gem
-   ```
-
-2. **Setup Frontend**
-   ```bash
-   cd sinjeem-game
-   npm install
-   cp .env.example .env
-   # Edit .env and set VITE_API_URL=http://localhost:8080
-   npm run dev
-   ```
-   Frontend will run on `http://localhost:5173`
-
-3. **Setup Backend**
-   ```bash
-   cd ../server
-   go mod tidy
-   cp .env.example .env
-   # Edit .env and configure Google OAuth credentials
-   go run .
-   ```
-   Backend will run on `http://localhost:8080`
-
-### Environment Variables
-
-#### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:8080
+```bash
+git clone https://github.com/mohannad-tawaijri/sen-gem.git
+cd sen-gem
 ```
 
-#### Backend (.env)
-```env
-PORT=8080
-FRONTEND_URL=http://localhost:5173
-QUESTIONS_DIR=../sinjeem-game/public/questions
+### 2. Frontend
 
-# Google OAuth
-GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-client-secret
-GOOGLE_REDIRECT_URL=http://localhost:8080/auth/google/callback
-
-# Session
-SESSION_SECRET=your-random-secret-key-here
-
-# Database (optional, defaults to SQLite)
-# DATABASE_URL=postgres://user:pass@host:5432/dbname
+```bash
+cd sinjeem-game
+npm install
+cp .env.example .env        # set VITE_API_URL if needed
+npm run dev                 # http://localhost:5173
 ```
 
-### Google OAuth Setup
+### 3. Backend
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a new project or select existing
-3. Enable Google+ API
-4. Create OAuth 2.0 credentials
-5. Add authorized redirect URI: `http://localhost:8080/auth/google/callback`
-6. Copy Client ID and Secret to `.env`
+```bash
+cd server
+go mod tidy
+cp .env.example .env        # fill in the values below
+go run .                    # http://localhost:8080
+```
 
 ---
 
-## 📚 Documentation
+## 🔐 Environment Variables
 
-### Project Structure
+> Never commit a real `.env`. Only the `*.env.example` templates are tracked.
+> Generate a strong session secret, e.g. `openssl rand -base64 32`.
+
+### Backend (`server/.env`)
+
+| Variable               | Default                                          | Description                              |
+| ---------------------- | ------------------------------------------------ | ---------------------------------------- |
+| `APP_ENV`              | `development`                                     | `development` or `production`            |
+| `PORT`                 | `8080`                                            | API port                                 |
+| `FRONTEND_ORIGIN`      | `http://localhost:5173`                           | Allowed CORS origin                      |
+| `DATABASE_URL`         | `file:server.db`                                  | SQLite file or Postgres DSN              |
+| `SESSION_SECRET`       | —                                                 | **Required in prod.** 32+ random chars   |
+| `QUESTIONS_DIR`        | `../sinjeem-game/public/questions`                | Path to question JSON files              |
+| `GOOGLE_CLIENT_ID`     | —                                                 | Optional, for Google OAuth              |
+| `GOOGLE_CLIENT_SECRET` | —                                                 | Optional, for Google OAuth              |
+| `OAUTH_REDIRECT_URL`   | `http://localhost:8080/auth/google/callback`      | Must match Google Cloud settings        |
+| `AFTER_LOGIN_REDIRECT` | `http://localhost:5173/#/`                        | Where to land after login               |
+
+### Frontend (`sinjeem-game/.env`)
+
+| Variable       | Description                          |
+| -------------- | ------------------------------------ |
+| `VITE_API_URL` | Base URL of the backend API          |
+
+### Google OAuth setup (optional)
+
+1. Open the [Google Cloud Console](https://console.cloud.google.com).
+2. Create a project and OAuth 2.0 credentials.
+3. Add the redirect URI: `http://localhost:8080/auth/google/callback`.
+4. Copy the Client ID and Secret into `server/.env`.
+
+---
+
+## 📁 Project Structure
 
 ```
 sen-gem/
-├── sinjeem-game/           # Frontend Vue application
-│   ├── src/
-│   │   ├── components/     # Vue components
-│   │   ├── stores/         # Pinia stores
-│   │   ├── services/       # API services
-│   │   └── types/          # TypeScript types
-│   ├── public/
-│   │   ├── questions/      # Question JSON files
-│   │   └── media/          # Images and assets
-│   └── scripts/            # Build and maintenance scripts
-│
-├── server/                 # Backend Go application
-│   ├── auth/              # Authentication handlers
-│   ├── config/            # Configuration management
-│   ├── db/                # Database connection
-│   ├── models/            # Data models
-│   └── questions/         # Question service
-│
-├── pics/                  # Project screenshots
-├── Dockerfile            # Docker configuration
-├── render.yaml           # Render.com deployment config
-└── DEPLOYMENT.md         # Deployment guide
+├── sinjeem-game/            # Frontend (Vue 3 + Vite)
+│   ├── src/                 # components, stores, services, types
+│   └── public/
+│       ├── questions/       # Question JSON files
+│       └── media/           # Category images & assets
+├── server/                  # Backend (Go + Gin)
+│   ├── auth/                # OAuth, password, sessions, rate limiting
+│   ├── config/              # Env configuration
+│   ├── db/                  # Database connection
+│   ├── models/              # Data models
+│   └── questions/           # Question loading & serving
+├── pics/                    # Screenshots
+├── Dockerfile               # Container build
+└── render.yaml              # Render.com blueprint
 ```
 
-### API Endpoints
+---
 
-#### Authentication
+## 🔌 API Reference
+
+### Authentication
+
 ```
-GET  /auth/google/login       - Initiate Google OAuth
-GET  /auth/google/callback    - OAuth callback handler
-GET  /auth/me                 - Get current user
-POST /auth/logout             - Logout user
-POST /auth/register           - Register with email/password
-POST /auth/login              - Login with email/password
-```
-
-#### Questions
-```
-GET  /questions/next          - Get next question
-     ?category=onepiece       - Filter by category
-     &difficulty=400          - Filter by difficulty
-
-POST /questions/reset         - Reset seen questions
-     ?category=football       - Reset specific category
-     &difficulty=600          - Reset specific difficulty
-
-GET  /questions/preview       - Preview available questions
-     ?category=got
-     &difficulty=200
-     &limit=5
+GET  /auth/google/login       Initiate Google OAuth
+GET  /auth/google/callback    OAuth callback
+GET  /auth/me                 Current user
+POST /auth/logout             Log out
+POST /auth/register           Register (email/password)
+POST /auth/login              Log in (email/password)
 ```
 
-#### Health
+### Questions
+
 ```
-GET  /health                  - Health check endpoint
+GET  /questions/next      ?category=onepiece&difficulty=400   Next unseen question
+POST /questions/reset     ?category=football&difficulty=600   Reset seen questions
+GET  /questions/preview   ?category=got&difficulty=200&limit=5  Preview questions
+GET  /health                                                  Health check
 ```
 
-### Question JSON Format
-
-Each category has a JSON file with 30 questions:
+### Question JSON format
 
 ```json
-[
-  {
-    "id": "onepiece-200-001",
-    "difficulty": 200,
-    "q": "What is Luffy's dream?",
-    "a": "To become Pirate King",
-    "tags": ["onepiece", "main_character", "dreams"]
-  }
-]
-```
-
-### Adding New Categories
-
-1. **Create question file**: `public/questions/mycategory.json`
-2. **Add to categories**: Update `public/questions/categories.json`
-3. **Add image**: Place image in `public/media/categories/mycategory.png`
-4. **Register in backend**: Add to `server/questions/service.go`
-
-```go
-// In canonicalCategories map
-var canonicalCategories = map[string]struct{}{
-    "mycategory": {},
-    // ... other categories
-}
-
-// In canonByLower map
-var canonByLower = map[string]string{
-    "mycategory": "mycategory",
-    // ... other mappings
+{
+  "id": "onepiece-200-001",
+  "difficulty": 200,
+  "q": "What is Luffy's dream?",
+  "a": "To become Pirate King",
+  "tags": ["onepiece", "main_character", "dreams"]
 }
 ```
+
+### Adding a category
+
+1. Create `sinjeem-game/public/questions/<category>.json`.
+2. Register it in `sinjeem-game/public/questions/categories.json`.
+3. Add an image to `sinjeem-game/public/media/categories/<category>.png`.
+4. Add the canonical name to the maps in `server/questions/service.go`.
 
 ---
 
@@ -290,91 +194,51 @@ var canonByLower = map[string]string{
 ### Docker
 
 ```bash
-docker build -t sen-gem .
-docker run -p 8080:8080 -e DATABASE_URL="your-db-url" sen-gem
+docker build -t sin-jeem .
+docker run -d -p 8080:8080 \
+  -e APP_ENV=production \
+  -e SESSION_SECRET="$(openssl rand -base64 32)" \
+  -e FRONTEND_ORIGIN=https://yourdomain.com \
+  -e DATABASE_URL="postgres://user:pass@host:5432/sengem?sslmode=require" \
+  sin-jeem
 ```
 
 ### Render.com
 
-The project includes `render.yaml` for easy deployment:
+The repo ships a `render.yaml` blueprint. Connect the GitHub repo as a **Blueprint**
+in the Render dashboard and set the secret environment variables there.
 
-1. Connect your GitHub repository to Render
-2. Render will automatically detect the configuration
-3. Set environment variables in Render dashboard
-4. Deploy!
+### Production checklist
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
-
----
-
-## 🎨 Screenshots
-
-<details>
-<summary>Click to view screenshots</summary>
-
-### Game Board
-![Game Board](pics/Screenshot%202025-07-26%20143503.png)
-
-### Question Display
-![Question](pics/Screenshot%202025-07-26%20143524.png)
-
-### Fortune Wheel
-![Wheel](pics/Screenshot%202025-07-26%20143613.png)
-
-### Categories
-![Categories](pics/Screenshot%202025-07-26%20143627.png)
-
-</details>
+- Always serve over HTTPS; cookies are `Secure` when `APP_ENV=production`.
+- Set a strong, unique `SESSION_SECRET` — never use the dev default.
+- Set `FRONTEND_ORIGIN` to your exact public URL (no trailing slash, no `*`).
+- Use PostgreSQL with SSL and strong credentials; back it up regularly.
+- Keep all secrets in environment variables / a secret manager — never in git.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-- Follow the existing code style
-- Add TypeScript types for all new code
-- Test your changes thoroughly
-- Update documentation as needed
-- Write meaningful commit messages
+1. Fork and create a feature branch.
+2. Follow the existing code style; type all new frontend code.
+3. Test your changes and update docs as needed.
+4. Open a pull request with a clear description.
 
 ---
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Licensed under the MIT License — see [LICENSE](LICENSE).
 
 ---
 
 ## 👨‍💻 Author
 
-**Mohannad Tawaijri**
-- GitHub: [@mohannad-tawaijri](https://github.com/mohannad-tawaijri)
-- Email: mohannd9926@gmail.com
-
----
-
-## 🙏 Acknowledgments
-
-- Vue.js team for the amazing framework
-- Go and Gin communities
-- All contributors and testers
-- Arabic quiz community
-
----
+**Mohannad Tawaijri** · [@mohannad-tawaijri](https://github.com/mohannad-tawaijri) · mohannad9926@gmail.com
 
 <div align="center">
 
-**Made with ❤️ for Arabic learners and quiz enthusiasts**
-
-[⬆ Back to Top](#-سنجيم-sen-gem---arabic-quiz-game-platform)
+**Made with ❤️ for Arabic quiz enthusiasts**
 
 </div>

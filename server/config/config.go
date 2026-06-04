@@ -48,6 +48,9 @@ func Load() AppConfig {
 		AfterLoginRedirect: Get("AFTER_LOGIN_REDIRECT", "http://localhost:5173/#/"),
 	}
 	if cfg.SessionSecret == "dev-insecure-secret-change-me" {
+		if cfg.Env == "production" {
+			log.Fatal("SESSION_SECRET must be set to a strong, unique value in production")
+		}
 		log.Println("[warn] SESSION_SECRET is using default value; set a strong secret in production")
 	}
 	return cfg

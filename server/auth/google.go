@@ -2,10 +2,11 @@ package auth
 
 import (
 	"context"
+	crand "crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
-	"math/rand"
 	"net/http"
 	"strings"
 	"time"
@@ -48,13 +49,13 @@ const stateCookie = "sengem_oauth_state"
 const redirectCookie = "sengem_oauth_redirect"
 
 func randomState() string {
-	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	// Use a cryptographically secure source for the OAuth CSRF state token.
 	b := make([]byte, 24)
-	rand.Seed(time.Now().UnixNano())
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+	if _, err := crand.Read(b); err != nil {
+		// crypto/rand should never fail; fall back to a time-derived value.
+		return hex.EncodeToString([]byte(time.Now().String()))
 	}
-	return string(b)
+	return hex.EncodeToString(b)
 }
 
 func (gp *GoogleProvider) Login(w http.ResponseWriter, r *http.Request) {
@@ -144,6 +145,12 @@ func (gp *GoogleProvider) Callback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Upsert user in DB (link to existing by email if found)
+	//
+	// KNOWN LIMITATION: OAuth-created users are stored with an empty Username,
+	// and models.User has a UNIQUE index on `username`. SQLite/Postgres allow
+	// many NULLs but only one empty string, so a *second* Google-only signup
+	// (with no pre-existing local account by email) fails the unique constraint.
+	// Fix would be to make Username nullable (*string) or generate one here.
 	var id uint
 	err = gp.db.Transaction(func(tx *gorm.DB) error {
 		// Small inline struct to avoid import cycles
