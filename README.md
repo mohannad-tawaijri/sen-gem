@@ -2,7 +2,6 @@
 
 <div align="center">
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Vue](https://img.shields.io/badge/Vue-3.5-42b883.svg)
 ![Go](https://img.shields.io/badge/Go-1.22+-00ADD8.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6.svg)
@@ -224,12 +223,6 @@ in the Render dashboard and set the secret environment variables there.
 2. Follow the existing code style; type all new frontend code.
 3. Test your changes and update docs as needed.
 4. Open a pull request with a clear description.
-
----
-
-## 📝 License
-
-Licensed under the MIT License — see [LICENSE](LICENSE).
 
 ---
 
