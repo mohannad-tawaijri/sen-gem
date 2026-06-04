@@ -235,7 +235,7 @@ Licensed under the MIT License — see [LICENSE](LICENSE).
 
 ## 👨‍💻 Author
 
-**Mohannad Tawaijri** · [@mohannad-tawaijri](https://github.com/mohannad-tawaijri) · mohannad9926@gmail.com
+**Mohannad Tawaijri** · [@mohannad-tawaijri](https://github.com/mohannad-tawaijri) · mohannad.altawaijri@gmail.com
 
 <div align="center">
 
